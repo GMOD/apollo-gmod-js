@@ -3,10 +3,16 @@
 
 export class User{
 
-  constructor(firstName: string,lastName: string,username: string) {
-    this._firstName = firstName
-    this._lastName = lastName
-    this._username = username
+  constructor(input: any) {
+    console.log('inputs')
+    console.log(input)
+
+    this._firstName = input.firstName
+    this._lastName = input.lastName
+    this._username = input.username
+    this._inactive = input.inactive
+    this._role = input.role
+    this._userId = input.userId
   }
 
   get username(): string {
@@ -27,8 +33,15 @@ export class User{
     this._firstName = value;
   }
 
+  set username(value: string) {
+    this._username = value;
+  }
+
   private _firstName: string
   private _lastName: string
   private _username: string
+  private _inactive: boolean;
+  private _role: string;
+  private _userId: bigint;
 
 }
