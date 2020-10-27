@@ -20,7 +20,7 @@ export const loadUsers = async (): Promise<Array<User> | string> => {
   try {
     const response = await axios.get( 'http://localhost:8080/user/loadUsers')
     // const response = await fetch( 'http://localhost:8080/user/loadUsers')
-    console.log('response',response)
+    // console.log('response',response)
     // const { data } = await response.json()
     const { data } = await response
     return data
