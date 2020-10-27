@@ -1,4 +1,7 @@
 
+/**
+ *  @jest-environment node
+ */
 // import {User} from "./User";
 
 import {loadUsers} from "./UserService";
@@ -10,9 +13,13 @@ test('Load Users', async () => {
   // user.username = 'bob.jones@test.com'
   // expect(user).toEqual({ firstName:'Bob',lastName: 'Jones',username:'bob.jones@test.com' })
 
-  const users = loadUsers()
+
+  console.log('a')
+  const users = await loadUsers()
+  console.log('b')
   console.log(users)
   expect(users.length).toEqual(2)
+  console.log('c')
 
 });
 
