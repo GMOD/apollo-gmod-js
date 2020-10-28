@@ -1,10 +1,10 @@
-import {User} from "../domain/User";
-import axios from 'axios';
+import {User} from '../domain/User'
+import axios from 'axios'
 
 
-export function getUser(username: string){
-
-}
+// export function getUser(username: string){
+//
+// }
 
 // @ts-ignore
 export const loadUsers = async (): Promise<Array<any> | string> => {

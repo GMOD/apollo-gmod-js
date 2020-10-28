@@ -1,7 +1,7 @@
-import {User} from "./User";
+import {User} from './User'
 
 test('User object test', async () => {
-  let user  = new User(
+  const user  = new User(
     {
       firstName: 'Admin',
       lastName: 'User',
@@ -30,4 +30,4 @@ test('User object test', async () => {
     }
 
   )
-});
+})

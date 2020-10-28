@@ -9,8 +9,8 @@ node_js:
   - 12
 
 script:
-  - npm run-script lint
   - yarn tsc --noEmit
+  - yarn run eslint src
   - yarn test:nowatch
 #  - npm run build
 

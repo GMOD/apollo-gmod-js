@@ -4,8 +4,8 @@
  */
 // import {User} from "./User";
 
-import {loadUsers} from "./UserService";
-import {User} from "../domain/User";
+import {loadUsers} from './UserService'
+import {User} from '../domain/User'
 
 test('Load Users', async () => {
   // const users = await loadUsers()
@@ -27,5 +27,5 @@ test('Load Users', async () => {
   //   } )
   // console.log('c')
 
-});
+})
 
