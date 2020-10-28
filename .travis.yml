@@ -9,7 +9,7 @@ node_js:
 
 script:
   - yarn tsc --noEmit
-  - yarn run eslint src
+  - yarn run eslint src/**/*.ts
   - yarn test:nowatch
 #  - npm run build
 

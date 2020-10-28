@@ -18,6 +18,11 @@ export class User{
   get username(): string {
     return this._username
   }
+
+  set username(value: string) {
+    this._username = value
+  }
+
   get lastName(): string {
     return this._lastName
   }
@@ -30,12 +35,9 @@ export class User{
   }
 
   set firstName(value: string) {
-    this._firstName = value;
+    this._firstName = value
   }
 
-  set username(value: string) {
-    this._username = value;
-  }
 
   private _firstName: string
   private _lastName: string
