@@ -3,14 +3,23 @@ language: node_js
 git:
   depth: false
 
+services:
+  - docker
+
 node_js:
   - 10
   - 12
 
-script:
-  - yarn tsc --noEmit
-  - yarn run eslint src/**/*.ts
-  - yarn test:nowatch
+jobs:
+  include:
+    - stage: lint
+      script:
+        - yarn tsc --noEmit
+        - yarn run eslint src/**/*.ts
+    - stage: test
+      script:
+        - docker run --memory=4g -d -p 8888:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
+        - travis_wait yarn test:nowatch
 #  - npm run build
 
 cache:
