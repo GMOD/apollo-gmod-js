@@ -1,0 +1,19 @@
+language: node_js
+
+git:
+  depth: false
+
+node_js:
+  - 10
+  - 12
+
+script:
+  - yarn tsc --noEmit
+  - yarn run eslint src/**/*.ts
+  - yarn test:nowatch
+#  - npm run build
+
+cache:
+  directories:
+    - node_modules
+    - yarn
