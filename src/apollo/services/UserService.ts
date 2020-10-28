@@ -6,7 +6,8 @@ export function getUser(username: string){
 
 }
 
-export const loadUsers = async (): Promise<Array<User> | string> => {
+// @ts-ignore
+export const loadUsers = async (): Promise<Array<any> | string> => {
 
   try {
     const response = await axios.get( 'http://localhost:8080/user/loadUsers')
