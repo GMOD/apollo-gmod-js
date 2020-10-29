@@ -26,7 +26,7 @@ script:
 #      script:
   - docker run --memory=4g -d -p 8080:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
   - curl http://localhost:8080/apollo/loadUsers
-  - sleep 10
+  - sleep 120
   - curl http://localhost:8080/apollo/loadUsers
   - yarn test:nowatch
 #  - npm run build
