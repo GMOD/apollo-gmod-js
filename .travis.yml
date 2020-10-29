@@ -6,9 +6,9 @@ git:
 services:
   - docker
 
-#node_js:
-#  - 10
-#  - 12
+node_js:
+  - 10
+  - 12
 
 before_install:
   - docker load -i docker_images/images.tar || true
@@ -16,19 +16,19 @@ before_install:
 before_cache:
   - docker save -o docker_images/images.tar $(docker images -a -q)
 
-jobs:
-  include:
-    - stage: lint
-      script:
-        - yarn tsc --noEmit
-        - yarn run eslint src/**/*.ts
-    - stage: test
-      script:
-        - docker run --memory=4g -d -p 8080:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
-        - curl http://localhost:8080/apollo/loadUsers
-        - sleep 10
-        - curl http://localhost:8080/apollo/loadUsers
-        - yarn test:nowatch
+#jobs:
+#  include:
+#    - stage: lint
+script:
+  - yarn tsc --noEmit
+  - yarn run eslint src/**/*.ts
+#    - stage: test
+#      script:
+  - docker run --memory=4g -d -p 8080:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
+  - curl http://localhost:8080/apollo/loadUsers
+  - sleep 10
+  - curl http://localhost:8080/apollo/loadUsers
+  - yarn test:nowatch
 #  - npm run build
 
 cache:
