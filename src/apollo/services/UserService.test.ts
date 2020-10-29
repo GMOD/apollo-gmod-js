@@ -21,7 +21,7 @@ test('Load Users', async () => {
       userCount: 1,
       searchName: null,
       groups: [],
-      userId: 49,
+      userId: 19,
       organismPermissions: [],
       username: 'admin@local.host'
     } )

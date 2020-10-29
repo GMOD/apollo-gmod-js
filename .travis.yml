@@ -25,7 +25,7 @@ jobs:
     - stage: test
       script:
         - docker run --memory=4g -d -p 8080:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
-        - travis_wait sleep 120
+        - sleep 60
         - yarn test:nowatch
 #  - npm run build
 
