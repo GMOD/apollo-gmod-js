@@ -35,3 +35,4 @@ cache:
   directories:
     - node_modules
     - yarn
+    - docker_images
