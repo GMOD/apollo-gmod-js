@@ -8,7 +8,7 @@ import axios from 'axios'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export const loadUsers = async (): Promise<Array<string> | string> => {
+export const loadUsers = async (): Promise<Array<any> | string> => {
 
   try {
     const response = await axios.get( 'http://localhost:8080/user/loadUsers')
