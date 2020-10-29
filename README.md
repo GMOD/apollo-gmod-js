@@ -1,6 +1,32 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+[![Build Status](https://travis-ci.com/GMOD/apollo-gmod-js.svg?branch=master)](https://travis-ci.com/GMOD/apollo-gmod-js)
+
+## Apollo-gmod-js
+
+This is a javascript library that interacts with the [Apollo 3](https://github.com/GMOD/Apollo3Server/) API.  
+
+### Testing:
+
+To run unit tests in watch mode:
+
+    yarn **/*.unit.test.ts
+    
+To run server tests as well, run against [Apollo 3](https://github.com/GMOD/Apollo3Server/):
+
+Using docker:
+
+    docker run --memory=4g -d -p 8080:8080 -v `pwd`/apollo_shared_dir/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
+    
+    yarn test
+ 
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+To run without watch:
+
+    yarn test:nowatch
+    
 
 ## Available Scripts
 
@@ -14,10 +40,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
 
@@ -44,3 +66,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Notes
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
