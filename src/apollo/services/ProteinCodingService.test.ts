@@ -5,14 +5,12 @@
 
 import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
-import {User} from '../domain/User'
 
 
 test('Set Readthrough Stop Codon', async () => {
 
   // add transcript
-  const inputJSON = '{ "features":[{"location":{"fmin":734606,"strand":1,"fmax":735570},"name":"GB40828-RA","children":[{"location":{"fmin":734606,"strand":1,"fmax":734733},"type":{"name":"exon","cv":{"name":"sequence"}}},{"location":{"fmin":735446,"strand":1,"fmax":735570},"type":{"name":"exon","cv":{"name":"sequence"}}},{"location":{"fmin":734606,"strand":1,"fmax":734766},"type":{"name":"exon","cv":{"name":"sequence"}}},{"location":{"fmin":734930,"strand":1,"fmax":735014},"type":{"name":"exon","cv":{"name":"sequence"}}},{"location":{"fmin":735245,"strand":1,"fmax":735570},"type":{"name":"exon","cv":{"name":"sequence"}}},{"location":{"fmin":734733,"strand":1,"fmax":735446},"type":{"name":"CDS","cv":{"name":"sequence"}}}],"type":{"name":"mRNA","cv":{"name":"sequence"}}}],"track":"Group1.10"}"\n' +
-    ' "{ "track": "Group1.10", "features": [{"location":{"fmin":1248797,"fmax":1249052,"strand":-1},"type":{"cv":{"name":"sequence"},"name":"mRNA"},"name":"GB40722-RA","children":[{"location":{"fmin":1248797,"fmax":1249052,"strand":-1},"type":{"cv":{"name":"sequence"},"name":"exon"}},{"location":{"fmin":1248797,"fmax":1249052,"strand":-1},"type":{"cv":{"name":"sequence"},"name":"CDS"}}]}], "operation": "add_transcript" }"\n'
+  const inputJSON = { features:[{'location':{'fmin':734606,'strand':1,'fmax':735570},'name':'GB40828-RA','children':[{'location':{'fmin':734606,'strand':1,'fmax':734733},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735446,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734606,'strand':1,'fmax':734766},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734930,'strand':1,'fmax':735014},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735245,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734733,'strand':1,'fmax':735446},'type':{'name':'CDS','cv':{'name':'sequence'}}}],'type':{'name':'mRNA','cv':{'name':'sequence'}}}],'track':'Group1.10'}
   const transcript = await addTranscript(inputJSON) as Array<ProteinCodingTranscript>
 
   // verify transcript
