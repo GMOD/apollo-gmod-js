@@ -11,9 +11,7 @@ export const addTranscript = async (inputData:JSON): Promise<Array<ProteinCoding
     const { data } = await response
     return data
   } catch (error) {
-    if (error) {
-      return error.message
-    }
+    return error.message ? error.message : error
   }
 
 }
