@@ -20,6 +20,7 @@ export const addUser = async (username:string,firstName:string,lastName:string,r
       email:username,
       firstName:firstName,
       lastName:lastName,
+      password:'password',
       role:role.toUpperCase(),
     })
     const { data } = await response
@@ -42,7 +43,7 @@ export const getUser = async (username:string): Promise<User | string> => {
 export const deleteUser = async (username: string): Promise<User | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/user/deleteUser')
+    const response = await axios.post( 'http://localhost:8080/user/deleteUser',{userToDelete: username})
     const { data } = await response
     return data
   } catch (error) {
