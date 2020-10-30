@@ -2,16 +2,18 @@
 /**
  *  @jest-environment node
  */
-// import {User} from "./User";
 
 import {loadUsers} from './UserService'
 import {User} from '../domain/User'
 
 test('Load Users', async () => {
-  const users = await loadUsers()
-  console.log('returned users',users)
+  const users = await loadUsers() as Array<User>
+  console.log(users)
+  console.log(typeof users)
+  expect(typeof users).not.toEqual('string')
+  // console.log('returned users',users)
   expect(users.length).toEqual(1)
-  const user = users[0]
+  const user:User =  users[0] as User
   expect(user.firstName).toEqual('Admin')
   expect(user.lastName).toEqual('User')
   expect(user.inactive).toEqual(false)

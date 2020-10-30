@@ -2,6 +2,27 @@
 
 
 export class User{
+  get userId(): bigint {
+    return this._userId;
+  }
+
+  set userId(value: bigint) {
+    this._userId = value;
+  }
+  get role(): string {
+    return this._role;
+  }
+
+  set role(value: string) {
+    this._role = value;
+  }
+  get inactive(): boolean {
+    return this._inactive;
+  }
+
+  set inactive(value: boolean) {
+    this._inactive = value;
+  }
 
   constructor(input: any) {
     console.log('inputs')
