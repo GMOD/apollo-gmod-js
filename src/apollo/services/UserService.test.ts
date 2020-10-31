@@ -37,16 +37,9 @@ test('Delete User', async () => {
   const resultC = await deleteUser('trash2@bx.psu.edu') as User
   expect(resultC.username).toEqual('trash2@bx.psu.edu')
   const users = await loadUsers() as Array<User>
+  console.log('users: ',users)
   const resultD = await getUser('trash2@bx.psu.edu')
   expect(resultD).toContain('404')
-  expect(resultD.username).not.toEqual('trash2@bx.psu.edu')
 
 })
 
-// beforeEach(() => {
-//   initializeCityDatabase();
-// });
-//
-// afterEach(() => {
-//   clearCityDatabase();
-// });
