@@ -40,6 +40,8 @@ test('Delete User', async () => {
   const resultC = await deleteUser('trash2@bx.psu.edu') as User
   console.log('result C',resultC)
   expect(resultC.username).toEqual('trash2@bx.psu.edu')
+  const users = await loadUsers() as Array<User>
+  console.log('add users: ',users)
   const resultD = await getUser('trash2@bx.psu.edu') as User
   console.log('result D',resultD)
   expect(resultD.username).not.toEqual('trash2@bx.psu.edu')
