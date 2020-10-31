@@ -31,7 +31,7 @@ test('Get User', async () => {
 })
 
 test('Add User', async () => {
-  const userReturn = await addUser('trash@bx.psu.edu','Poutrelle','Lapinou') as User
+  const userReturn = await addUser('trash1@bx.psu.edu','Poutrelle','Lapinou') as User
   console.log(userReturn)
   console.log(typeof userReturn)
   // expect(typeof userReturn).not.toEqual('string')
@@ -39,20 +39,20 @@ test('Add User', async () => {
   expect(userReturn.firstName).toEqual('Poutrelle')
   expect(userReturn.lastName).toEqual('Lapinou')
   expect(userReturn.inactive).toEqual(false)
-  expect(userReturn.username).toEqual('trash@bx.psu.edu')
-  const resultC = await deleteUser('trash@bx.psu.edu') as User
+  expect(userReturn.username).toEqual('trash1@bx.psu.edu')
+  const resultC = await deleteUser('trash1@bx.psu.edu') as User
 })
 
 test('Delete User', async () => {
-  const resultA = await addUser('trash@bx.psu.edu','Poutrelle','Lapinou') as User
+  const resultA = await addUser('trash2@bx.psu.edu','Poutrelle','Lapinou') as User
   console.log('result A',resultA)
-  expect(resultA.username).toEqual('trash@bx.psu.edu')
-  const resultB = await getUser('trash@bx.psu.edu') as User
-  expect(resultB.username).toEqual('trash@bx.psu.edu')
-  const resultC = await deleteUser('trash@bx.psu.edu') as User
-  expect(resultC.username).toEqual('trash@bx.psu.edu')
-  const resultD = await getUser('trash@bx.psu.edu') as User
-  expect(resultD.username).not.toEqual('trash@bx.psu.edu')
+  expect(resultA.username).toEqual('trash2@bx.psu.edu')
+  const resultB = await getUser('trash2@bx.psu.edu') as User
+  expect(resultB.username).toEqual('trash2@bx.psu.edu')
+  const resultC = await deleteUser('trash2@bx.psu.edu') as User
+  expect(resultC.username).toEqual('trash2@bx.psu.edu')
+  const resultD = await getUser('trash2@bx.psu.edu') as User
+  expect(resultD.username).not.toEqual('trash2@bx.psu.edu')
 
 })
 
