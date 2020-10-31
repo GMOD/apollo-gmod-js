@@ -30,19 +30,6 @@ test('Get User', async () => {
 
 })
 
-test('Add User', async () => {
-  const userReturn = await addUser('trash1@bx.psu.edu','Poutrelle','Lapinou') as User
-  console.log(userReturn)
-  console.log(typeof userReturn)
-  // expect(typeof userReturn).not.toEqual('string')
-  // expect(userReturn.error).toBeUndefined()
-  expect(userReturn.firstName).toEqual('Poutrelle')
-  expect(userReturn.lastName).toEqual('Lapinou')
-  expect(userReturn.inactive).toEqual(false)
-  expect(userReturn.username).toEqual('trash1@bx.psu.edu')
-  const resultC = await deleteUser('trash1@bx.psu.edu') as User
-})
-
 test('Delete User', async () => {
   const resultA = await addUser('trash2@bx.psu.edu','Poutrelle','Lapinou') as User
   console.log('result A',resultA)
