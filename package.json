@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test:unit": "react-scripts test --env=node  **/*.unit.test.ts",
     "test": "react-scripts test --env=node",
-    "test:nowatch": "react-scripts test --env=node --watchAll=false",
+    "test:nowatch": "react-scripts test --env=node --watchAll=false --runInBand",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

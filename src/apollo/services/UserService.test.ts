@@ -55,3 +55,11 @@ test('Delete User', async () => {
   expect(resultD.username).not.toEqual('trash@bx.psu.edu')
 
 })
+
+// beforeEach(() => {
+//   initializeCityDatabase();
+// });
+//
+// afterEach(() => {
+//   clearCityDatabase();
+// });
