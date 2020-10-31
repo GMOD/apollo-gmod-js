@@ -10,11 +10,11 @@ node_js:
   - 10
   - 12
 
-#before_install:
-#  - docker load -i docker_images/images.tar || true
-#
-#before_cache:
-#  - docker save -o docker_images/images.tar $(docker images -a -q)
+before_install:
+  - docker load -i docker_images/images.tar || true
+
+before_cache:
+  - docker save -o docker_images/images.tar $(docker images -a -q)
 
 script:
   - yarn tsc --noEmit
@@ -29,4 +29,4 @@ cache:
   directories:
     - node_modules
     - yarn
-#    - docker_images
+    - docker_images
