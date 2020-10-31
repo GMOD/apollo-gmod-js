@@ -7,23 +7,23 @@ import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
 
 
-test('Set Readthrough Stop Codon', async () => {
-
-  // add transcript
-  const inputJSON = { features:[{'location':{'fmin':734606,'strand':1,'fmax':735570},'name':'GB40828-RA','children':[{'location':{'fmin':734606,'strand':1,'fmax':734733},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735446,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734606,'strand':1,'fmax':734766},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734930,'strand':1,'fmax':735014},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735245,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734733,'strand':1,'fmax':735446},'type':{'name':'CDS','cv':{'name':'sequence'}}}],'type':{'name':'mRNA','cv':{'name':'sequence'}}}],'track':'Group1.10'}
-  const transcript = await addTranscript(inputJSON) as Array<ProteinCodingTranscript>
-
-  // verify transcript
-  console.log(transcript)
-
-  // parse JSON to get CDS uniquename
-
-  // set readThrough stop codon server
-
-  // get sequence
-
-
-})
+// test('Set Readthrough Stop Codon', async () => {
+//
+//   // add transcript
+//   const inputJSON = { features:[{'location':{'fmin':734606,'strand':1,'fmax':735570},'name':'GB40828-RA','children':[{'location':{'fmin':734606,'strand':1,'fmax':734733},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735446,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734606,'strand':1,'fmax':734766},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734930,'strand':1,'fmax':735014},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735245,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734733,'strand':1,'fmax':735446},'type':{'name':'CDS','cv':{'name':'sequence'}}}],'type':{'name':'mRNA','cv':{'name':'sequence'}}}],'track':'Group1.10'}
+//   const transcript = await addTranscript(inputJSON) as Array<ProteinCodingTranscript>
+//
+//   // verify transcript
+//   console.log(transcript)
+//
+//   // parse JSON to get CDS uniquename
+//
+//   // set readThrough stop codon server
+//
+//   // get sequence
+//
+//
+// })
 
 
 beforeAll(() => {
