@@ -32,22 +32,30 @@ test('Get User', async () => {
 test('Delete User', async () => {
   const resultA = await addUser('trash2@bx.psu.edu','Poutrelle','Lapinou') as User
   expect(resultA.username).toEqual('trash2@bx.psu.edu')
+  let users = await loadUsers() as Array<User>
+  console.log('users 1: ',users)
   const resultB = await getUser('trash2@bx.psu.edu') as User
   expect(resultB.username).toEqual('trash2@bx.psu.edu')
   const resultC = await deleteUser('trash2@bx.psu.edu') as User
   expect(resultC.username).toEqual('trash2@bx.psu.edu')
-  let resultD = await getUser('trash2@bx.psu.edu')
-  let users = await loadUsers() as Array<User>
-  console.log('users: ',users)
-  if(resultD.indexOf('404')<0){
-    console.log('doing a delay')
-    const delay = (ms:number) => new Promise(res => setTimeout(res, ms))
-    await delay(5000)
-  }
+  // console.log('users: ',users)
+  // if(resultD.toString().indexOf('404')<0){
+  //   console.log('doing a delay')
+  //   const delay = (ms:number) => new Promise(res => setTimeout(res, ms))
+  //   await delay(5000)
+  // }
   users = await loadUsers() as Array<User>
   console.log('users 2: ',users)
+  let resultD = await getUser('trash2@bx.psu.edu')
   resultD = await getUser('trash2@bx.psu.edu')
-  expect(resultD).toContain('404')
+  expect(resultD.toString()).toContain('404')
 
 })
 
+beforeEach( async () => {
+  await deleteUser('trash2@bx.psu.edu')
+})
+
+afterEach( async () => {
+  await deleteUser('trash2@bx.psu.edu')
+})
