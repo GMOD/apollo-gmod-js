@@ -6,12 +6,32 @@
 // import {addOrganism, deleteOrganism, getOrganism, findAllOrganisms} from './OrganismService'
 import {deleteOrganism,addOrganismWithDirectory,findAllOrganisms} from './OrganismService'
 import {Organism} from '../domain/Organism'
+// import fs from 'fs'
+import fse from 'fs-extra'
 
 const TEST_DATA = `${__dirname}/../../../test-data`
+const APOLLO_DATA = `${__dirname}/../../../apollo-data`
+
+// beforeAll( () => {
+// })
+
+beforeEach( async () => {
+  // await deleteOrganism('trash2@bx.psu.edu')
+})
+
+afterEach( async () => {
+  // await deleteOrganism('trash2@bx.psu.edu')
+})
+
 
 test('Copy directories over', () => {
   console.log('current directory',__dirname)
   console.log('TEST_DATA',TEST_DATA)
+  console.log('APOLLO_DATA',APOLLO_DATA)
+  fse.remove(APOLLO_DATA)
+  // fse.mkdirSync(APOLLO_DATA)
+  fse.copy(TEST_DATA,APOLLO_DATA)
+  // fs.copyFileSync(TEST_DATA,APOLLO_DATA)
   // console.log(./)
 })
 
@@ -57,10 +77,3 @@ test('Load Organisms', async () => {
 //
 // })
 
-beforeEach( async () => {
-  await deleteOrganism('trash2@bx.psu.edu')
-})
-
-afterEach( async () => {
-  await deleteOrganism('trash2@bx.psu.edu')
-})
