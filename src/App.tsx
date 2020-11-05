@@ -11,8 +11,8 @@ const App = () => (
       // url="https://api.mna.dev.spsapps.net/swagger/?format=openapi"
       url="http://localhost:8080/swagger/api/"
       responseInterceptor={response => {
-        if (response.status === 200) {
-          console.log(response.data)
+        if (response.status !== 200) {
+          console.error('There is an error in the response',response)
         }
         return response // this is what i needed to do.
       }}
