@@ -60,17 +60,17 @@ test('Load Organisms', async () => {
   const initOrganisms = await findAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
-  const output = await addOrganismWithDirectory(
-    `${APOLLO_DATA}/dataset_1_files/data/`,'myorg'
-  )
-  console.log('output',output)
-  const addedOrganismResult = await findAllOrganisms() as Array<Organism>
-  expect(addedOrganismResult.length).toEqual(1)
-  const addedOrganism = addedOrganismResult[0] as Organism
-  console.log('addedOrganism',addedOrganism)
-  expect(typeof addedOrganism).not.toEqual('string')
-  expect(addedOrganism.commonName).toEqual('myorg')
-  expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
+  // const output = await addOrganismWithDirectory(
+  //   `${APOLLO_DATA}/dataset_1_files/data/`,'myorg'
+  // )
+  // console.log('output',output)
+  // const addedOrganismResult = await findAllOrganisms() as Array<Organism>
+  // expect(addedOrganismResult.length).toEqual(1)
+  // const addedOrganism = addedOrganismResult[0] as Organism
+  // console.log('addedOrganism',addedOrganism)
+  // expect(typeof addedOrganism).not.toEqual('string')
+  // expect(addedOrganism.commonName).toEqual('myorg')
+  // expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
   // TODO: add a filter for 'admin@local.host
 
 })
