@@ -49,6 +49,7 @@ test('Load Organisms', async () => {
   // expect(typeof addedOrganism).not.toEqual('string')
   // expect(addedOrganism.commonName).toEqual('myorg')
   // expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
+  // TODO: add a filter for 'admin@local.host
 
 })
 
