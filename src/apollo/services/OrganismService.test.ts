@@ -7,6 +7,14 @@
 import {deleteOrganism,addOrganismWithDirectory,findAllOrganisms} from './OrganismService'
 import {Organism} from '../domain/Organism'
 
+const TEST_DATA = `${__dirname}/../../../test-data`
+
+test('Copy directories over', () => {
+  console.log('current directory',__dirname)
+  console.log('TEST_DATA',TEST_DATA)
+  // console.log(./)
+})
+
 test('Load Organisms', async () => {
   const organisms = await findAllOrganisms() as Array<Organism>
   console.log('oirganisms',organisms)
