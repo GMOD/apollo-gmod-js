@@ -18,37 +18,59 @@ beforeAll( () => {
 })
 
 afterAll( () => {
-  fse.remove(APOLLO_DATA)
+  // fse.remove(APOLLO_DATA)
 })
 
 beforeEach( async () => {
-  // await deleteOrganism('trash2@bx.psu.edu')
+  const allOrganisms = await findAllOrganisms() as Array<Organism>
+  console.log('all organisms',allOrganisms)
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
+  const finalOrganisms = await findAllOrganisms() as Array<Organism>
+  expect(finalOrganisms.length).toEqual(0)
 })
 
 afterEach( async () => {
-  // await deleteOrganism('trash2@bx.psu.edu')
+  const allOrganisms = await findAllOrganisms() as Array<Organism>
+  console.log('all organisms',allOrganisms)
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
+  const finalOrganisms = await findAllOrganisms() as Array<Organism>
+  expect(finalOrganisms.length).toEqual(0)
 })
 
 
 test('Copy directories over', () => {
   fse.remove(APOLLO_DATA)
+  console.log(TEST_DATA,APOLLO_DATA)
+  expect(fse.pathExistsSync(TEST_DATA)).toBeTruthy()
   fse.copySync(TEST_DATA,APOLLO_DATA, {recursive: true})
+  fse.pathExists(APOLLO_DATA, (err, exists) => {
+    console.log(err) // => null
+    console.log(exists) // => false
+    expect(exists).toEqual(true)
+  })
+  // expect(fse.pathExistsSync(APOLLO_DATA)).toBeTruthy()
 
 })
 
 test('Load Organisms', async () => {
-  const organisms = await findAllOrganisms() as Array<Organism>
-  expect(typeof organisms).not.toEqual('string')
-  // expect(organisms.length).toEqual(0)
-  // const addedOrganismResult = await addOrganismWithDirectory(
-  //   `${APOLLO_DATA}/dataset_1_files/data/`,'myorg'
-  // )
-  // expect(addedOrganismResult.length).toEqual(1)
-  // const addedOrganism = addedOrganismResult[0] as Organism
-  // console.log('addedOrganism',addedOrganism)
-  // expect(typeof addedOrganism).not.toEqual('string')
-  // expect(addedOrganism.commonName).toEqual('myorg')
-  // expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
+  const initOrganisms = await findAllOrganisms() as Array<Organism>
+  expect(typeof initOrganisms).not.toEqual('string')
+  expect(initOrganisms.length).toEqual(0)
+  const output = await addOrganismWithDirectory(
+    `${APOLLO_DATA}/dataset_1_files/data/`,'myorg'
+  )
+  console.log('output',output)
+  const addedOrganismResult = await findAllOrganisms() as Array<Organism>
+  expect(addedOrganismResult.length).toEqual(1)
+  const addedOrganism = addedOrganismResult[0] as Organism
+  console.log('addedOrganism',addedOrganism)
+  expect(typeof addedOrganism).not.toEqual('string')
+  expect(addedOrganism.commonName).toEqual('myorg')
+  expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
   // TODO: add a filter for 'admin@local.host
 
 })
