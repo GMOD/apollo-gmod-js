@@ -22,7 +22,7 @@ test('web services available', async () => {
   expect(data.swagger).toEqual('2.0')
   const test1 = await screen.getByText(/Apollo 3 Web Services/i)
   expect(test1).toBeInTheDocument()
-  await timer(1000)
+  await timer(2000)
   const linkElement = await screen.getByText(/Annotation Services/i)
   wrapper.asFragment()
   expect(linkElement).toBeInTheDocument()
