@@ -12,8 +12,14 @@ import fse from 'fs-extra'
 const TEST_DATA = `${__dirname}/../../../test-data`
 const APOLLO_DATA = `${__dirname}/../../../apollo-data`
 
-// beforeAll( () => {
-// })
+beforeAll( () => {
+  fse.remove(APOLLO_DATA)
+  fse.copySync(TEST_DATA,APOLLO_DATA, {recursive: true})
+})
+
+afterAll( () => {
+  fse.remove(APOLLO_DATA)
+})
 
 beforeEach( async () => {
   // await deleteOrganism('trash2@bx.psu.edu')
@@ -25,29 +31,24 @@ afterEach( async () => {
 
 
 test('Copy directories over', () => {
-  console.log('current directory',__dirname)
-  console.log('TEST_DATA',TEST_DATA)
-  console.log('APOLLO_DATA',APOLLO_DATA)
   fse.remove(APOLLO_DATA)
-  // fse.mkdirSync(APOLLO_DATA)
-  fse.copy(TEST_DATA,APOLLO_DATA)
-  // fs.copyFileSync(TEST_DATA,APOLLO_DATA)
-  // console.log(./)
+  fse.copySync(TEST_DATA,APOLLO_DATA, {recursive: true})
+
 })
 
 test('Load Organisms', async () => {
   const organisms = await findAllOrganisms() as Array<Organism>
-  console.log('oirganisms',organisms)
-  console.log(organisms)
   expect(typeof organisms).not.toEqual('string')
-  expect(organisms.length).toEqual(0)
-  // TODO: add a filter for 'admin@local.host
-  // const organism:Organism =  organisms.filter( s => s.organismname == 'admin@local.host')[0]
-  // expect(organism.firstName).toEqual('Admin')
-  // expect(organism.lastName).toEqual('Organism')
-  // expect(organism.inactive).toEqual(false)
-  // expect(organism.role).toEqual('ADMIN')
-  // expect(organism.organismname).toEqual('admin@local.host')
+  // expect(organisms.length).toEqual(0)
+  // const addedOrganismResult = await addOrganismWithDirectory(
+  //   `${APOLLO_DATA}/dataset_1_files/data/`,'myorg'
+  // )
+  // expect(addedOrganismResult.length).toEqual(1)
+  // const addedOrganism = addedOrganismResult[0] as Organism
+  // console.log('addedOrganism',addedOrganism)
+  // expect(typeof addedOrganism).not.toEqual('string')
+  // expect(addedOrganism.commonName).toEqual('myorg')
+  // expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
 
 })
 
