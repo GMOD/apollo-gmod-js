@@ -17,4 +17,4 @@ test('web services available', async () => {
   const paths = Object.keys(data.paths)
   expect(paths.length).toBeGreaterThan(10)
   expect(paths).toContain('/annotationEditor/getAttributes')
-})
+},20000)

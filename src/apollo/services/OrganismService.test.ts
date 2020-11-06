@@ -77,7 +77,7 @@ test('Find All Organisms', async () => {
   expect(inputFiles).toContain('trackList.json')
   expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
   const result = await addOrganismWithDirectory(
-    APOLLO_INPUT_DIRECTORY,'mt push yorg'
+    APOLLO_INPUT_DIRECTORY,'myorg'
   )
   console.log('result',result)
   await sleep(3000)
@@ -89,7 +89,7 @@ test('Find All Organisms', async () => {
   expect(addedOrganism.sequences).toEqual(1)
   expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
   expect(addedOrganism.commonName).toEqual('myorg')
-})
+},20000)
 
 test('Get One Organisms', async () => {
   jest.setTimeout(10000)
