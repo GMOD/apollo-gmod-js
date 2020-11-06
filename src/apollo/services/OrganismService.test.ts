@@ -62,6 +62,7 @@ test('Find All Organisms', async () => {
   )
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   console.log('all results',addedOrganismResult,result)
+  expect(result.length).toEqual(1)
   expect(addedOrganismResult.length).toEqual(1)
   const addedOrganism = addedOrganismResult[0] as Organism
   // console.log('added organism',addedOrganism)
