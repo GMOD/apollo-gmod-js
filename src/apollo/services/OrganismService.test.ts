@@ -52,6 +52,7 @@ test('Copy directories over', async () => {
 })
 
 test('Find All Organisms', async () => {
+  expect(fse.pathExistsSync(APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)

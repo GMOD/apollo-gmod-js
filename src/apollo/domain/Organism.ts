@@ -2,7 +2,7 @@
 
 
 export class Organism{
-  constructor(input: any) {
+  constructor(input: Organism) {
     this.commonName = input.commonName
     this.uniqueName = input.uniqueName
     this.searchdb = input.searchdb
