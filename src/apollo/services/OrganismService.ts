@@ -2,10 +2,21 @@ import {Organism} from '../domain/Organism'
 import axios from 'axios'
 
 
-export const findAllOrganisms = async (): Promise<Array<Organism> | string> => {
+export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
 
   try {
     const response = await axios.get( 'http://localhost:8080/organism/findAllOrganisms')
+    const { data } = await response
+    return data
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+}
+
+export const getOrganism = async (lookup:string): Promise<Array<Organism> | string> => {
+
+  try {
+    const response = await axios.get( `http://localhost:8080/organism/findAllOrganisms?organism=${lookup}`)
     const { data } = await response
     return data
   } catch (error) {
@@ -46,16 +57,6 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
 //   }
 // }
 
-export const getOrganism = async (organismIdentifier:string): Promise<Organism | string> => {
-
-  try {
-    const response = await axios.post( 'http://localhost:8080/organism/getOrganism',{organism:organismIdentifier})
-    const { data } = await response
-    return data
-  } catch (error) {
-    return error.message ? error.message : error
-  }
-}
 export const deleteOrganism = async (organismIdentifier: string): Promise<Organism | string> => {
 
   try {
