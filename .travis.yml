@@ -25,6 +25,7 @@ script:
   - curl http://localhost:8080/user/loadUsers || true
   - sleep 60
   - curl http://localhost:8080/user/loadUsers
+  - curl http://localhost:8080/swagger/api
   - yarn test:nowatch
 
 cache:
