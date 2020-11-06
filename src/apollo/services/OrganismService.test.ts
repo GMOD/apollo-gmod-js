@@ -29,6 +29,7 @@ afterAll( async () => {
 })
 
 beforeEach( async () => {
+  jest.setTimeout(10000)
   await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
@@ -40,6 +41,7 @@ beforeEach( async () => {
 })
 
 afterEach( async () => {
+  jest.setTimeout(10000)
   await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
@@ -52,6 +54,7 @@ afterEach( async () => {
 
 
 test('Copy directories over', async () => {
+  jest.setTimeout(10000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const inputFiles = fse.readdirSync(LOCAL_APOLLO_DATA)
   const outputFiles = fse.readdirSync(TEST_DATA)
@@ -63,6 +66,7 @@ test('Copy directories over', async () => {
 })
 
 test('Find All Organisms', async () => {
+  jest.setTimeout(10000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
@@ -75,6 +79,7 @@ test('Find All Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
+  console.log('result',result)
   await sleep(3000)
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   expect(typeof addedOrganismResult).not.toEqual('string')
@@ -87,6 +92,7 @@ test('Find All Organisms', async () => {
 })
 
 test('Get One Organisms', async () => {
+  jest.setTimeout(10000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
@@ -99,6 +105,7 @@ test('Get One Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
+  console.log('result',result)
   await sleep(3000)
   const addedOrganism = await getOrganism('myorg') as Organism
   expect(addedOrganism.commonName).toEqual('myorg')
