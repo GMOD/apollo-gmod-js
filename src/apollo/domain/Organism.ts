@@ -15,9 +15,11 @@ export class Organism{
     this.publicMode = input.publicMode
     this.valid = input.valid
     this.obsolete = input.obsolete
+    this.sequences = input.sequences
   }
 
   commonName: string
+  sequences: number
   uniqueName: string
   searchdb: string
   genomeFasta: string
