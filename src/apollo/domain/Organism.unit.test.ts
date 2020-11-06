@@ -9,8 +9,6 @@ test('Organism object test', async () => {
     }
   )
   // user.firstName = 'Bob'
-  // user.lastName = 'Jones'
-  // user.username = 'bob.jones@test.com'
   expect(organism).toEqual(
     {
       commonName: 'temp_org',

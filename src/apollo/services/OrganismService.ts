@@ -13,12 +13,12 @@ export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
   }
 }
 
-export const getOrganism = async (lookup:string): Promise<Array<Organism> | string> => {
+export const getOrganism = async (lookup:string): Promise<Organism | string> => {
 
   try {
     const response = await axios.get( `http://localhost:8080/organism/findAllOrganisms?organism=${lookup}`)
     const { data } = await response
-    return data
+    return data[0]
   } catch (error) {
     return error.message ? error.message : error
   }

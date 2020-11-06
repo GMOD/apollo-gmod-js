@@ -58,13 +58,17 @@ test('Find All Organisms', async () => {
   expect(initOrganisms.length).toEqual(0)
   const INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
   const inputFiles = fse.readdirSync(INPUT_DIRECTORY)
+  expect(inputFiles.length).toBeGreaterThan(5)
+  expect(inputFiles.length).toBeLessThan(10)
+  expect(inputFiles).toContain('trackList.json')
+  expect(fse.pathExistsSync(INPUT_DIRECTORY)).toBeTruthy()
   console.log('input files',inputFiles)
   const result = await addOrganismWithDirectory(
     INPUT_DIRECTORY,'myorg'
   )
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   console.log('all results',addedOrganismResult,result)
-  expect(result.length).toEqual(1)
+  // expect(result).toEqual(1)
   expect(addedOrganismResult.length).toEqual(1)
   const addedOrganism = addedOrganismResult[0] as Organism
   // console.log('added organism',addedOrganism)
@@ -76,7 +80,7 @@ test('Find All Organisms', async () => {
   expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
 })
 
-test('Find One Organisms', async () => {
+test('Get One Organisms', async () => {
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
@@ -84,10 +88,7 @@ test('Find One Organisms', async () => {
   await addOrganismWithDirectory(
     inputDirectory,'myorg'
   )
-  const addedOrganismResult = await getOrganism('myorg') as Array<Organism>
-  expect(addedOrganismResult.length).toEqual(1)
-  const addedOrganism = addedOrganismResult[0] as Organism
-  // console.log('added organism',addedOrganism)
+  const addedOrganism = await getOrganism('myorg') as Organism
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
   expect(addedOrganism.directory).toEqual(inputDirectory)
@@ -96,16 +97,7 @@ test('Find One Organisms', async () => {
   expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
 })
 
-// test('Get Organism', async () => {
-//   const organism = await getOrganism('admin@local.host') as Organism
-//   expect(typeof organism).not.toEqual('string')
-//   expect(organism.firstName).toEqual('Admin')
-//   expect(organism.lastName).toEqual('Organism')
-//   expect(organism.organismname).toEqual('admin@local.host')
-//
-// })
-//
-// test('Delete Organism', async () => {
+// test('Add Organism With Sequence', async () => {
 //   const resultA = await addOrganism('trash2@bx.psu.edu','Poutrelle','Lapinou') as Organism
 //   expect(resultA.organismname).toEqual('trash2@bx.psu.edu')
 //   let organisms = await getAllOrganisms() as Array<Organism>
