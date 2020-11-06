@@ -7,44 +7,55 @@
 import {deleteOrganism, addOrganismWithDirectory, getAllOrganisms, getOrganism} from './OrganismService'
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
+import { promisify } from 'util'
+const sleep = promisify(setTimeout)
 
 const TEST_DATA = `${__dirname}/../../../test-data`
-const APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
+const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
+const APOLLO_DATA = '/data'
+const LOCAL_INPUT_DIRECTORY = `${LOCAL_APOLLO_DATA}/dataset_1_files/data/`
+const APOLLO_INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
+
+
 
 beforeAll( async () => {
-  fse.removeSync(APOLLO_DATA)
-  fse.ensureDirSync(APOLLO_DATA)
-  fse.copySync(TEST_DATA,APOLLO_DATA)
+  // fse.removeSync(LOCAL_APOLLO_DATA)
+  // fse.ensureDirSync(LOCAL_APOLLO_DATA)
+  // fse.copySync(TEST_DATA,LOCAL_APOLLO_DATA)
 })
 
 afterAll( async () => {
-  fse.removeSync(APOLLO_DATA)
+  // fse.removeSync(LOCAL_APOLLO_DATA)
 })
 
 beforeEach( async () => {
+  await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
+  await sleep(1000)
   const finalOrganisms = await getAllOrganisms() as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
 
 afterEach( async () => {
+  await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
+  await sleep(2000)
   const finalOrganisms = await getAllOrganisms() as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
 
 
 test('Copy directories over', async () => {
-  expect(fse.pathExistsSync(APOLLO_DATA)).toBeTruthy()
-  const inputFiles = fse.readdirSync(APOLLO_DATA)
+  expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
+  const inputFiles = fse.readdirSync(LOCAL_APOLLO_DATA)
   const outputFiles = fse.readdirSync(TEST_DATA)
-  expect(inputFiles.length).toEqual(outputFiles.length)
+  // expect(inputFiles.length).toEqual(outputFiles.length)
   expect(inputFiles).toContain('mrna-top.gff')
   expect(inputFiles).toContain('yeastI')
   expect(outputFiles.length).toBeGreaterThan(10)
@@ -52,49 +63,48 @@ test('Copy directories over', async () => {
 })
 
 test('Find All Organisms', async () => {
-  expect(fse.pathExistsSync(APOLLO_DATA)).toBeTruthy()
+  expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
-  const INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
-  const inputFiles = fse.readdirSync(INPUT_DIRECTORY)
+  const inputFiles = fse.readdirSync(LOCAL_INPUT_DIRECTORY)
   expect(inputFiles.length).toBeGreaterThan(5)
   expect(inputFiles.length).toBeLessThan(10)
   expect(inputFiles).toContain('trackList.json')
-  expect(fse.pathExistsSync(INPUT_DIRECTORY)).toBeTruthy()
-  console.log('input files',inputFiles)
+  expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
   const result = await addOrganismWithDirectory(
-    INPUT_DIRECTORY,'myorg'
+    APOLLO_INPUT_DIRECTORY,'myorg'
   )
+  await sleep(3000)
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
-  console.log('all results',addedOrganismResult,result)
-  // expect(result).toEqual(1)
+  expect(typeof addedOrganismResult).not.toEqual('string')
   expect(addedOrganismResult.length).toEqual(1)
   const addedOrganism = addedOrganismResult[0] as Organism
-  // console.log('added organism',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
-  expect(addedOrganism.directory).toEqual(INPUT_DIRECTORY)
-  expect(typeof addedOrganism).not.toEqual('string')
+  expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
   expect(addedOrganism.commonName).toEqual('myorg')
-  expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
 })
 
 test('Get One Organisms', async () => {
+  expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
-  const inputDirectory = `${APOLLO_DATA}/dataset_1_files/data/`
-  await addOrganismWithDirectory(
-    inputDirectory,'myorg'
+  const inputFiles = fse.readdirSync(LOCAL_INPUT_DIRECTORY)
+  expect(inputFiles.length).toBeGreaterThan(5)
+  expect(inputFiles.length).toBeLessThan(10)
+  expect(inputFiles).toContain('trackList.json')
+  expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
+  const result = await addOrganismWithDirectory(
+    APOLLO_INPUT_DIRECTORY,'myorg'
   )
+  await sleep(3000)
   const addedOrganism = await getOrganism('myorg') as Organism
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
-  expect(addedOrganism.directory).toEqual(inputDirectory)
-  expect(typeof addedOrganism).not.toEqual('string')
+  expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
   expect(addedOrganism.commonName).toEqual('myorg')
-  expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
 })
 
 // test('Add Organism With Sequence', async () => {
