@@ -56,10 +56,11 @@ test('Find All Organisms', async () => {
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
   const inputDirectory = `${APOLLO_DATA}/dataset_1_files/data/`
-  await addOrganismWithDirectory(
+  const result = await addOrganismWithDirectory(
     inputDirectory,'myorg'
   )
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
+  console.log('all results',addedOrganismResult,result)
   expect(addedOrganismResult.length).toEqual(1)
   const addedOrganism = addedOrganismResult[0] as Organism
   // console.log('added organism',addedOrganism)
