@@ -47,21 +47,21 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
 }
 
 
-// export const addOrganismWithSequence = async (directory:string,commonName:string): Promise<Organism | string> => {
-//
-//   try {
-//     const response = await axios.post( 'http://localhost:8080/organism/addOrganism',{
-//       email:'madeup',
-//       password:'password',
-//       directory,
-//       commonName,
-//     })
-//     const { data } = await response
-//     return data
-//   } catch (error) {
-//     return error.message ? error.message : error
-//   }
-// }
+export const addOrganismWithSequence = async (directory:string,commonName:string): Promise<Organism | string> => {
+
+  try {
+    const response = await axios.post( 'http://localhost:8080/organism/addOrganismWithSequence',{
+      commonName:'madeup',
+      password:'password',
+      directory,
+      commonName,
+    })
+    const { data } = await response
+    return data
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+}
 
 export const deleteOrganism = async (organismIdentifier: string): Promise<Organism | string> => {
 
