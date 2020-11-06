@@ -66,7 +66,7 @@ test('Copy directories over', async () => {
 })
 
 test('Find All Organisms', async () => {
-  jest.setTimeout(10000)
+  jest.setTimeout(20000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
@@ -77,7 +77,7 @@ test('Find All Organisms', async () => {
   expect(inputFiles).toContain('trackList.json')
   expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
   const result = await addOrganismWithDirectory(
-    APOLLO_INPUT_DIRECTORY,'myorg'
+    APOLLO_INPUT_DIRECTORY,'mt push yorg'
   )
   console.log('result',result)
   await sleep(3000)
