@@ -12,13 +12,13 @@ const TEST_DATA = `${__dirname}/../../../test-data`
 const APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 
 beforeAll( async () => {
-  await fse.removeSync(APOLLO_DATA)
-  await fse.ensureDirSync(APOLLO_DATA)
-  await fse.copySync(TEST_DATA,APOLLO_DATA)
+  fse.removeSync(APOLLO_DATA)
+  fse.ensureDirSync(APOLLO_DATA)
+  fse.copySync(TEST_DATA,APOLLO_DATA)
 })
 
 afterAll( async () => {
-  await fse.removeSync(APOLLO_DATA)
+  fse.removeSync(APOLLO_DATA)
 })
 
 beforeEach( async () => {
@@ -42,8 +42,8 @@ afterEach( async () => {
 
 test('Copy directories over', async () => {
   expect(fse.pathExistsSync(APOLLO_DATA)).toBeTruthy()
-  const inputFiles = await fse.readdir(APOLLO_DATA)
-  const outputFiles = await fse.readdir(TEST_DATA)
+  const inputFiles = fse.readdirSync(APOLLO_DATA)
+  const outputFiles = fse.readdirSync(TEST_DATA)
   expect(inputFiles.length).toEqual(outputFiles.length)
   expect(inputFiles).toContain('mrna-top.gff')
   expect(inputFiles).toContain('yeastI')
@@ -56,9 +56,11 @@ test('Find All Organisms', async () => {
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
-  const inputDirectory = `${APOLLO_DATA}/dataset_1_files/data/`
+  const INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
+  const inputFiles = fse.readdirSync(INPUT_DIRECTORY)
+  console.log('input files',inputFiles)
   const result = await addOrganismWithDirectory(
-    inputDirectory,'myorg'
+    INPUT_DIRECTORY,'myorg'
   )
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   console.log('all results',addedOrganismResult,result)
@@ -68,7 +70,7 @@ test('Find All Organisms', async () => {
   // console.log('added organism',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
-  expect(addedOrganism.directory).toEqual(inputDirectory)
+  expect(addedOrganism.directory).toEqual(INPUT_DIRECTORY)
   expect(typeof addedOrganism).not.toEqual('string')
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.directory).toEqual(`${APOLLO_DATA}/dataset_1_files/data/`)
