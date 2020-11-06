@@ -18,6 +18,12 @@ export const getOrganism = async (lookup:string): Promise<Organism | string> => 
   try {
     const response = await axios.get( `http://localhost:8080/organism/findAllOrganisms?organism=${lookup}`)
     const { data } = await response
+    if(data.length>1){
+      return `Error: duplicate organisms return for '${lookup}' organism ${data}`
+    }
+    if(data.length==0){
+      return `Error: No organisms returned for '${lookup}'`
+    }
     return data[0]
   } catch (error) {
     return error.message ? error.message : error
