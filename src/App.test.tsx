@@ -20,6 +20,7 @@ test('renders learn react link', async () => {
 })
 
 test('web services available', async () => {
+  jest.setTimeout(20000)
   const wrapper = render(<App/>)
   const response = await axios.get('http://localhost:8080/swagger/api', {})
   const { data } = response
@@ -30,4 +31,4 @@ test('web services available', async () => {
   const linkElement = await screen.getByText(/Annotation Services/i)
   wrapper.asFragment()
   expect(linkElement).toBeInTheDocument()
-})
+},20000)
