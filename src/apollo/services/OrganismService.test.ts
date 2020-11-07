@@ -29,8 +29,6 @@ afterAll( async () => {
 })
 
 beforeEach( async () => {
-  jest.setTimeout(10000)
-  await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
@@ -47,14 +45,13 @@ afterEach( async () => {
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
-  await sleep(2000)
+  await sleep(1000)
   const finalOrganisms = await getAllOrganisms() as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
 
 
 test('Copy directories over', async () => {
-  jest.setTimeout(10000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const inputFiles = fse.readdirSync(LOCAL_APOLLO_DATA)
   const outputFiles = fse.readdirSync(TEST_DATA)
@@ -66,7 +63,6 @@ test('Copy directories over', async () => {
 })
 
 test('Find All Organisms', async () => {
-  jest.setTimeout(20000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
@@ -80,7 +76,7 @@ test('Find All Organisms', async () => {
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
   console.log('result',result)
-  await sleep(3000)
+  await sleep(1000)
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   expect(typeof addedOrganismResult).not.toEqual('string')
   expect(addedOrganismResult.length).toEqual(1)
@@ -92,7 +88,6 @@ test('Find All Organisms', async () => {
 },20000)
 
 test('Get One Organisms', async () => {
-  jest.setTimeout(10000)
   expect(fse.pathExistsSync(LOCAL_APOLLO_DATA)).toBeTruthy()
   const initOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof initOrganisms).not.toEqual('string')
@@ -106,7 +101,7 @@ test('Get One Organisms', async () => {
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
   console.log('result',result)
-  await sleep(3000)
+  await sleep(1000)
   const addedOrganism = await getOrganism('myorg') as Organism
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
