@@ -47,15 +47,22 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
 }
 
 
-export const addOrganismWithSequence = async (sequenceData:string,commonName:string): Promise<Organism | string> => {
+export const addOrganismWithSequence = async (organismData:Buffer,commonName:string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/organism/addOrganismWithSequence',{
-      username:'garbage',
-      password:'password',
-      commonName,
-      sequenceData,
-    })
+    const response = await axios.post( 'http://localhost:8080/organism/addOrganismWithSequence',
+      {
+        username:'garbage',
+        password:'password',
+        commonName,
+        organismData:organismData,
+      },
+      {
+        headers: {
+          'Content-Type':'application/json'
+        }
+      }
+    )
     const { data } = await response
     return data
   } catch (error) {

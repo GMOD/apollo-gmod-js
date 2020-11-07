@@ -4,7 +4,13 @@
  */
 
 // import {addOrganism, deleteOrganism, getOrganism, getAllOrganisms} from './OrganismService'
-import {deleteOrganism, addOrganismWithDirectory, getAllOrganisms, getOrganism} from './OrganismService'
+import {
+  deleteOrganism,
+  addOrganismWithDirectory,
+  getAllOrganisms,
+  getOrganism,
+  addOrganismWithSequence
+} from './OrganismService'
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
 import { promisify } from 'util'
@@ -15,6 +21,7 @@ const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = '/data'
 const LOCAL_INPUT_DIRECTORY = `${LOCAL_APOLLO_DATA}/dataset_1_files/data/`
 const APOLLO_INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
+const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 
@@ -109,7 +116,18 @@ test('Get One Organisms', async () => {
   expect(addedOrganism.commonName).toEqual('myorg')
 })
 
-// test('Add Organism With Sequence', async () => {
+test('Add Organism With Sequence', async () => {
+
+  const initOrganisms = await getAllOrganisms() as Array<Organism>
+  expect(typeof initOrganisms).not.toEqual('string')
+  expect(initOrganisms.length).toEqual(0)
+
+  const organismData:Buffer = fse.readFileSync(LOCAL_SEQ_DIRECTORY)
+  const result = await addOrganismWithSequence(organismData,'myseqorg')
+  console.log(result)
+  await sleep(1000)
+  const addedOrganism = await getOrganism('myseqorg') as Organism
+  expect(addedOrganism.commonName).toEqual('myseqorg')
 //   const resultA = await addOrganism('trash2@bx.psu.edu','Poutrelle','Lapinou') as Organism
 //   expect(resultA.organismname).toEqual('trash2@bx.psu.edu')
 //   let organisms = await getAllOrganisms() as Array<Organism>
@@ -124,5 +142,5 @@ test('Get One Organisms', async () => {
 //   resultD = await getOrganism('trash2@bx.psu.edu')
 //   expect(resultD.toString()).toContain('404')
 //
-// })
+})
 
