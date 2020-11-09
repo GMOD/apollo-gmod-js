@@ -123,23 +123,11 @@ test('Add Organism With Sequence', async () => {
   expect(initOrganisms.length).toEqual(0)
 
   const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg')
-  console.log(result)
+  console.log('result:',result)
   await sleep(1000)
   const addedOrganism = await getOrganism('myseqorg') as Organism
+  console.log('retrieved organism',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
-//   const resultA = await addOrganism('trash2@bx.psu.edu','Poutrelle','Lapinou') as Organism
-//   expect(resultA.organismname).toEqual('trash2@bx.psu.edu')
-//   let organisms = await getAllOrganisms() as Array<Organism>
-//   console.log('organisms 1: ',organisms)
-//   const resultB = await getOrganism('trash2@bx.psu.edu') as Organism
-//   expect(resultB.organismname).toEqual('trash2@bx.psu.edu')
-//   const resultC = await deleteOrganism('trash2@bx.psu.edu') as Organism
-//   expect(resultC.organismname).toEqual('trash2@bx.psu.edu')
-//   organisms = await getAllOrganisms() as Array<Organism>
-//   console.log('organisms 2: ',organisms)
-//   let resultD = await getOrganism('trash2@bx.psu.edu')
-//   resultD = await getOrganism('trash2@bx.psu.edu')
-//   expect(resultD.toString()).toContain('404')
 //
 })
 

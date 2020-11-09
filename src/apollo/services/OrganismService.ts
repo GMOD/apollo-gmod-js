@@ -1,6 +1,7 @@
 import {Organism} from '../domain/Organism'
 import axios from 'axios'
 import fse from 'fs-extra'
+import FormData from 'form-data'
 
 
 export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
@@ -59,15 +60,11 @@ export const addOrganismWithSequence = async (directory:string,commonName:string
   // const sequenceData:ReadableStream = await fse.createReadStream(directory)
   // formData.append('sequenceData',sequenceData)
   try {
-    const response = await axios.post( 'http://localhost:8080/organism/addOrganism',
+    const response = await axios.post( 'http://localhost:8080/organism/addOrganismWithSequence',
+      formData,
       {
-        headers:{
-          'Content-Type':'multipart/form-data'
-        }
+        headers: formData.getHeaders()
       },
-      {
-        data: formData,
-      }
     )
     const { data } = await response
     return data
