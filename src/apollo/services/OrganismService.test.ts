@@ -18,7 +18,7 @@ const sleep = promisify(setTimeout)
 
 const TEST_DATA = `${__dirname}/../../../test-data`
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
-const APOLLO_DATA = '/data'
+const APOLLO_DATA = process.env.DOCKER_CI=='true' ? '/data' : LOCAL_APOLLO_DATA
 const LOCAL_INPUT_DIRECTORY = `${LOCAL_APOLLO_DATA}/dataset_1_files/data/`
 const APOLLO_INPUT_DIRECTORY = `${APOLLO_DATA}/dataset_1_files/data/`
 const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
@@ -26,6 +26,12 @@ const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 beforeAll( async () => {
+  console.log('input args')
+  console.log(process.argv)
+
+
+  console.log('env args')
+  console.log(process.env)
   // fse.removeSync(LOCAL_APOLLO_DATA)
   // fse.ensureDirSync(LOCAL_APOLLO_DATA)
   // fse.copySync(TEST_DATA,LOCAL_APOLLO_DATA)
@@ -122,8 +128,7 @@ test('Add Organism With Sequence', async () => {
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
 
-  const organismData:Buffer = fse.readFileSync(LOCAL_SEQ_DIRECTORY)
-  const result = await addOrganismWithSequence(organismData,'myseqorg')
+  const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg')
   console.log(result)
   await sleep(1000)
   const addedOrganism = await getOrganism('myseqorg') as Organism

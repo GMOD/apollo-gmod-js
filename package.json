@@ -35,6 +35,7 @@
     "lint": "yarn run eslint src/**/*.ts src/**/*.tsx",
     "test:unit": "react-scripts test --env=node  **/*.unit.test.ts",
     "test": "react-scripts test --env=node",
+    "test:docker": "DOCKER_CI=true  react-scripts test --env=node",
     "test:nowatch": "react-scripts test --env=node --watchAll=false --runInBand",
     "eject": "react-scripts eject"
   },
