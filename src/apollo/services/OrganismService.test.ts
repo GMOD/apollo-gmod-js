@@ -26,12 +26,6 @@ const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 beforeAll( async () => {
-  console.log('input args')
-  console.log(process.argv)
-
-
-  console.log('env args')
-  console.log(process.env)
   // fse.removeSync(LOCAL_APOLLO_DATA)
   // fse.ensureDirSync(LOCAL_APOLLO_DATA)
   // fse.copySync(TEST_DATA,LOCAL_APOLLO_DATA)
