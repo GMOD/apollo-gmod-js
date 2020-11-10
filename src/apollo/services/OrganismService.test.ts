@@ -82,7 +82,6 @@ test('Find All Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
-  console.log('result',result)
   await sleep(1000)
   const addedOrganismResult = await getAllOrganisms() as Array<Organism>
   expect(typeof addedOrganismResult).not.toEqual('string')
@@ -107,7 +106,6 @@ test('Get One Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg'
   )
-  console.log('result',result)
   await sleep(1000)
   const addedOrganism = await getOrganism('myorg') as Organism
   expect(addedOrganism.commonName).toEqual('myorg')
@@ -123,17 +121,15 @@ test('Add Organism With Sequence', async () => {
   expect(initOrganisms.length).toEqual(0)
 
   const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg')
-  console.log('result:',result)
   expect(typeof result).not.toEqual('string')
-  console.log('type of result',(typeof  result))
-  expect(result['error']).toBeUndefined()
+  expect(JSON.stringify(result)).not.toContain('error')
   await sleep(1000)
   const addedOrganism = await getOrganism('myseqorg') as Organism
-  console.log('retrieved organism',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
 
-  expect(addedOrganism.genomeFasta).toEqual('something')
-  expect(addedOrganism.genomeFastaIndex).toEqual('something else ')
+  expect(addedOrganism.genomeFasta).toEqual('seq/myseqorg.fa')
+  expect(addedOrganism.genomeFastaIndex).toEqual('seq/myseqorg.fa.fai')
+  // expect(addedOrganism.searchdb).toEqual('seq/myseqorg.fa.fai')
 
   await sleep(1000)
 
