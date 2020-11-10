@@ -124,10 +124,22 @@ test('Add Organism With Sequence', async () => {
 
   const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg')
   console.log('result:',result)
+  expect(typeof result).not.toEqual('string')
+  console.log('type of result',(typeof  result))
+  expect(result['error']).toBeUndefined()
   await sleep(1000)
   const addedOrganism = await getOrganism('myseqorg') as Organism
   console.log('retrieved organism',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
+
+  expect(addedOrganism.genomeFasta).toEqual('something')
+  expect(addedOrganism.genomeFastaIndex).toEqual('something else ')
+
+  await sleep(1000)
+
+  const allOrganisms = await getAllOrganisms() as Array<Organism>
+  expect(typeof allOrganisms).not.toEqual('string')
+  expect(allOrganisms.length).toEqual(1)
 //
 })
 
