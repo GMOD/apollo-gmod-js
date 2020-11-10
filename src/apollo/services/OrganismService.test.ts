@@ -40,14 +40,14 @@ beforeEach( async () => {
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
-  await sleep(1000)
+  // await sleep(1000)
   const finalOrganisms = await getAllOrganisms() as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
 
 afterEach( async () => {
-  jest.setTimeout(10000)
-  await sleep(1000)
+  // jest.setTimeout(10000)
+  // await sleep(1000)
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
@@ -129,13 +129,15 @@ test('Add Organism With Sequence', async () => {
 
   expect(addedOrganism.genomeFasta).toEqual('seq/myseqorg.fa')
   expect(addedOrganism.genomeFastaIndex).toEqual('seq/myseqorg.fa.fai')
-  // expect(addedOrganism.searchdb).toEqual('seq/myseqorg.fa.fai')
 
   await sleep(1000)
 
   const allOrganisms = await getAllOrganisms() as Array<Organism>
   expect(typeof allOrganisms).not.toEqual('string')
   expect(allOrganisms.length).toEqual(1)
-//
+
+  await sleep(1000)
+  await deleteOrganism(addedOrganism.commonName)
+
 })
 
