@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {ApolloServer} from '../ApolloServer'
 
 /**
  * Returns common path and local server info
@@ -6,7 +7,7 @@ import axios from 'axios'
 export const getServerInfo = async (): Promise<string> => {
 
   try {
-    const response = await axios.get( 'http://localhost:8080/annotator/getSystemInfo')
+    const response = await axios.get( `${ApolloServer.getHost()}/annotator/getSystemInfo`)
     const { data } = await response
     return data
   } catch (error) {
@@ -20,7 +21,7 @@ export const getServerInfo = async (): Promise<string> => {
 export const updateCommonPath = async (directory:string): Promise<string> => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/annotator/updateCommonPath',
+      `${ApolloServer.getHost()}/annotator/updateCommonPath`,
       {directory:directory}
     )
     const { data } = await response

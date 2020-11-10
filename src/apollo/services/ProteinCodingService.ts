@@ -7,7 +7,7 @@ import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
 export const addTranscript = async (inputData:JSON): Promise<Array<ProteinCodingTranscript> | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/annotationEditor/addTranscript',inputData)
+    const response = await axios.post( `${ApolloServer.getHost()}/annotationEditor/addTranscript',inputData)
     const { data } = await response
     return data
   } catch (error) {

@@ -1,11 +1,12 @@
 import {User} from '../domain/User'
 import axios from 'axios'
+import {ApolloServer} from '../ApolloServer'
 
 
 export const loadUsers = async (): Promise<Array<User> | string> => {
 
   try {
-    const response = await axios.get( 'http://localhost:8080/user/loadUsers')
+    const response = await axios.get( `${ApolloServer.getHost()}/user/loadUsers`)
     const { data } = await response
     return data
   } catch (error) {
@@ -16,7 +17,7 @@ export const loadUsers = async (): Promise<Array<User> | string> => {
 export const addUser = async (username:string,firstName:string,lastName:string,role = 'user'): Promise<User | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/user/createUser',{
+    const response = await axios.post( `${ApolloServer.getHost()}/user/createUser`,{
       email:username,
       firstName:firstName,
       lastName:lastName,
@@ -33,7 +34,7 @@ export const addUser = async (username:string,firstName:string,lastName:string,r
 export const getUser = async (username:string): Promise<User | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/user/getUser',{username:username})
+    const response = await axios.post( `${ApolloServer.getHost()}/user/getUser`,{username:username})
     const { data } = await response
     return data
   } catch (error) {
@@ -43,7 +44,7 @@ export const getUser = async (username:string): Promise<User | string> => {
 export const deleteUser = async (username: string): Promise<User | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/user/deleteUser',{userToDelete: username})
+    const response = await axios.post( `${ApolloServer.getHost()}/user/deleteUser`,{userToDelete: username})
     const { data } = await response
     return data
   } catch (error) {

@@ -26,7 +26,14 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 To run without watch:
 
     yarn test:nowatch
-    
+
+   
+## Configure for a separate server
+
+If using a non local-host server set `APOLLO_URL`.  Default is 'http://localhost:8080':
+
+     export APOLLO_URL=<some-other-server>
+
 
 ## Available Scripts
 
