@@ -1,7 +1,7 @@
 
 export class ApolloServer{
 
-  getHost():string{
+  static getHost():string{
     return process.env.APOLLO_URL || 'http://localhost:8080'
   }
 

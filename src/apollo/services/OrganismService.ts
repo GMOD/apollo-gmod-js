@@ -2,12 +2,13 @@ import {Organism} from '../domain/Organism'
 import axios from 'axios'
 import fse from 'fs-extra'
 import FormData from 'form-data'
+import {ApolloServer} from '../ApolloServer'
 
 
 export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
 
   try {
-    const response = await axios.get( 'http://localhost:8080/organism/findAllOrganisms')
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms`)
     const { data } = await response
     return data
   } catch (error) {
@@ -18,7 +19,7 @@ export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
 export const getOrganism = async (lookup:string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.get( `http://localhost:8080/organism/findAllOrganisms?organism=${lookup}`)
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms?organism=${lookup}`)
     const { data } = await response
     if(data.length>1){
       return `Error: duplicate organisms return for '${lookup}' organism ${data}`
@@ -35,7 +36,7 @@ export const getOrganism = async (lookup:string): Promise<Organism | string> => 
 export const addOrganismWithDirectory = async (directory:string,commonName:string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/organism/addOrganism',{
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/addOrganism`,{
       email:'madeup',
       password:'password',
       directory,
@@ -60,7 +61,7 @@ export const addOrganismWithSequence = async (directory:string,commonName:string
   // const sequenceData:ReadableStream = await fse.createReadStream(directory)
   // formData.append('sequenceData',sequenceData)
   try {
-    const response = await axios.post( 'http://localhost:8080/organism/addOrganismWithSequence',
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/addOrganismWithSequence`,
       formData,
       {
         headers: formData.getHeaders()
@@ -76,7 +77,7 @@ export const addOrganismWithSequence = async (directory:string,commonName:string
 export const deleteOrganism = async (organismIdentifier: string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( 'http://localhost:8080/organism/deleteOrganism',{organism: organismIdentifier})
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganism`,{organism: organismIdentifier})
     const { data } = await response
     return data
   } catch (error) {
