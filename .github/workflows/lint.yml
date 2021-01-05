@@ -6,19 +6,20 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [12.x]
-##        node-version: [10.x, 12.x, 14.x]
-#        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-#
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install deps
-      run: yarn
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install deps
+        run: yarn
+      - name: tsc
+        run: yarn tsc --noEmit
+      - name: eslint
+        run: yarn run eslint src/**/*.ts
