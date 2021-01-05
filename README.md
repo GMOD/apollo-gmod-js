@@ -1,6 +1,7 @@
 
 
-[![Build Status](https://travis-ci.com/GMOD/apollo-gmod-js.svg?branch=master)](https://travis-ci.com/GMOD/apollo-gmod-js)
+![Node.js TSC Lint](https://github.com/GMOD/apollo-gmod-js/workflows/Node.js%20TSC%20Lint/badge.svg)
+![Node.js CI](https://github.com/GMOD/apollo-gmod-js/workflows/Node.js%20CI/badge.svg)
 
 ## Apollo-gmod-js
 
