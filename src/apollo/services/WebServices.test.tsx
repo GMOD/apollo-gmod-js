@@ -6,6 +6,7 @@ import axios from 'axios'
 beforeAll(async () =>{
   const response = await axios.get('http://localhost:8080/swagger/api')
   const { data } = response
+  expect(data).toBeDefined()
 },30000)
 
 test('web services available', async () => {
