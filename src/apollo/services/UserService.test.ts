@@ -33,13 +33,11 @@ test('Delete User', async () => {
   const resultA = await addUser('trash2@bx.psu.edu','Poutrelle','Lapinou') as User
   expect(resultA.username).toEqual('trash2@bx.psu.edu')
   let users = await loadUsers() as Array<User>
-  console.log('users 1: ',users)
   const resultB = await getUser('trash2@bx.psu.edu') as User
   expect(resultB.username).toEqual('trash2@bx.psu.edu')
   const resultC = await deleteUser('trash2@bx.psu.edu') as User
   expect(resultC.username).toEqual('trash2@bx.psu.edu')
   users = await loadUsers() as Array<User>
-  console.log('users 2: ',users)
   let resultD = await getUser('trash2@bx.psu.edu')
   resultD = await getUser('trash2@bx.psu.edu')
   expect(resultD.toString()).toContain('404')

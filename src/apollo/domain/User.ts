@@ -25,9 +25,6 @@ export class User{
   }
 
   constructor(input: any) {
-    console.log('inputs')
-    console.log(input)
-
     this._firstName = input.firstName
     this._lastName = input.lastName
     this._username = input.username
