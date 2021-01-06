@@ -4,6 +4,7 @@ import SwaggerUI from 'swagger-ui-react'
 import 'swagger-ui-react/swagger-ui.css'
 
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = () => (
   <div className="App">
     <h3>Apollo 3 Web Services</h3>

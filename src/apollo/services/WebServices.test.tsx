@@ -1,7 +1,6 @@
 /**
  *  @jest-environment node
  */
-import React from 'react'
 import axios from 'axios'
 
 beforeAll(async () =>{

@@ -10,6 +10,7 @@ const timer = (ms: any) => new Promise(res => setTimeout(res, ms))
 
 beforeAll(async () =>{
   const response = await axios.get('http://localhost:8080/swagger/api')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = response
 },30000)
 
