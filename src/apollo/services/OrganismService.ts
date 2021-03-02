@@ -5,6 +5,26 @@ import FormData from 'form-data'
 import {ApolloServer} from '../ApolloServer'
 
 
+export const removeEmptyCommonDirectory = async  (): Promise<string> => {
+  try {
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/removeEmptyCommonTracks`)
+    const { data } = await response
+    return data
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+}
+
+export const getCommonDirectory = async  (): Promise<string> => {
+  try {
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/getCommonTrackDirectory`)
+    const { data } = await response
+    return data.path
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+}
+
 export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
 
   try {

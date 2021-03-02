@@ -9,7 +9,7 @@ import {
   addOrganismWithDirectory,
   getAllOrganisms,
   getOrganism,
-  addOrganismWithSequence
+  addOrganismWithSequence, getCommonDirectory, removeEmptyCommonDirectory
 } from './OrganismService'
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
@@ -26,13 +26,15 @@ const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 beforeAll( async () => {
-  // fse.removeSync(LOCAL_APOLLO_DATA)
-  // fse.ensureDirSync(LOCAL_APOLLO_DATA)
-  // fse.copySync(TEST_DATA,LOCAL_APOLLO_DATA)
+  const result = await removeEmptyCommonDirectory()
+  console.log(result)
 })
 
 afterAll( async () => {
   // fse.removeSync(LOCAL_APOLLO_DATA)
+  const result = await removeEmptyCommonDirectory()
+  console.log(result)
+
 })
 
 beforeEach( async () => {
@@ -91,6 +93,10 @@ test('Find All Organisms', async () => {
   expect(addedOrganism.sequences).toEqual(1)
   expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
   expect(addedOrganism.commonName).toEqual('myorg')
+  const allOrganisms = await getAllOrganisms() as Array<Organism>
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
 },20000)
 
 test('Get One Organisms', async () => {
@@ -112,6 +118,10 @@ test('Get One Organisms', async () => {
   expect(addedOrganism.sequences).toEqual(1)
   expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
   expect(addedOrganism.commonName).toEqual('myorg')
+  const allOrganisms = await getAllOrganisms() as Array<Organism>
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
 })
 
 test('Add Organism With Sequence', async () => {

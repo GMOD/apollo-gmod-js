@@ -5,12 +5,15 @@
 
 import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
-import {deleteOrganism, getAllOrganisms} from './OrganismService'
+import {deleteOrganism, getAllOrganisms, removeEmptyCommonDirectory} from './OrganismService'
 import {Organism} from '../domain/Organism'
 import {promisify} from 'util'
 export const sleep = promisify(setTimeout)
 
 
+/**
+ * From RequestHandlingServiceIntegrationSpec
+ */
 test('Add Transcript with UTR' , () => {
 
   // add transcript
@@ -52,7 +55,9 @@ afterEach( async () => {
   expect(finalOrganisms.length).toEqual(0)
 })
 
-beforeAll(() => {
+beforeAll(async () => {
+  const result = await removeEmptyCommonDirectory()
+  console.log(result)
 
   // 0. if user does not exist
   // let user:User  = getUser('test@test.com')
@@ -84,7 +89,7 @@ beforeAll(() => {
   // return true
 })
 
-afterAll(() => {
+afterAll(async  () => {
 
   // deleteUser('test@test.com')
   // deleteOrganism('sampleAnimal')
