@@ -5,9 +5,12 @@
 
 import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
+import {deleteOrganism, getAllOrganisms} from './OrganismService'
+import {Organism} from '../domain/Organism'
+import {sleep} from './OrganismService.test'
 
 
-test('Set Readthrough Stop Codon', async () => {
+test('Add Transcript with UTR' , () => {
 
   // add transcript
   const inputJSON = { features:[{'location':{'fmin':734606,'strand':1,'fmax':735570},'name':'GB40828-RA','children':[{'location':{'fmin':734606,'strand':1,'fmax':734733},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735446,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734606,'strand':1,'fmax':734766},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734930,'strand':1,'fmax':735014},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735245,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734733,'strand':1,'fmax':735446},'type':{'name':'CDS','cv':{'name':'sequence'}}}],'type':{'name':'mRNA','cv':{'name':'sequence'}}}],'track':'Group1.10'}
@@ -26,6 +29,27 @@ test('Set Readthrough Stop Codon', async () => {
 
 })
 
+beforeEach( async () => {
+  const allOrganisms = await getAllOrganisms() as Array<Organism>
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
+  // await sleep(1000)
+  const finalOrganisms = await getAllOrganisms() as Array<Organism>
+  expect(finalOrganisms.length).toEqual(0)
+})
+
+afterEach( async () => {
+  // jest.setTimeout(10000)
+  // await sleep(1000)
+  const allOrganisms = await getAllOrganisms() as Array<Organism>
+  for( const org of allOrganisms){
+    await deleteOrganism(org.commonName)
+  }
+  await sleep(1000)
+  const finalOrganisms = await getAllOrganisms() as Array<Organism>
+  expect(finalOrganisms.length).toEqual(0)
+})
 
 beforeAll(() => {
 

@@ -10,7 +10,7 @@ beforeAll(async () =>{
 },30000)
 
 test('web services available', async () => {
-  jest.setTimeout(2000)
+  jest.setTimeout(5000)
   const response = await axios.get('http://localhost:8080/swagger/api')
   const { data } = response
   expect(data.swagger).toEqual('2.0')
