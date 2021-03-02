@@ -7,7 +7,8 @@ import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
 import {deleteOrganism, getAllOrganisms} from './OrganismService'
 import {Organism} from '../domain/Organism'
-import {sleep} from './OrganismService.test'
+import {promisify} from 'util'
+export const sleep = promisify(setTimeout)
 
 
 test('Add Transcript with UTR' , () => {
