@@ -6,7 +6,7 @@
 import {addTranscript} from './ProteinCodingService'
 import {
   addOrganismWithDirectory,
-  deleteOrganism,
+  deleteOrganism, deleteOrganismFeatures,
   getAllOrganisms,
   getOrganism,
   removeEmptyCommonDirectory
@@ -15,6 +15,7 @@ import {Organism} from '../domain/Organism'
 import {addUser, deleteUser, getUser} from './UserService'
 import {User} from '../domain/User'
 import {Role} from '../domain/Role'
+import {sleep} from '../functions/Timing'
 
 const TEST_USER = 'test@test.com'
 const TEST_ANIMAL = 'testAnimal'
@@ -37,7 +38,7 @@ test('Add Transcript with UTR' , async() => {
   const returnObject = await addTranscript(transcriptObject)
   console.log('output test')
   console.log(returnObject)
-  expect(true).toEqual(true)
+  // expect(returnObject).toEqual(validatedTranscriptReturn)
 
 
   // const returnedCodingArray = getCodingArray(returnObject)
@@ -79,16 +80,14 @@ beforeAll(async () => {
   // 0. if user does not exist
   let user = await getUser(TEST_USER) as User
   console.log('user 0',user)
-  console.log('user 1',user.toString().indexOf('fail')>0)
-  if(!user || user.username !== TEST_USER){
+  // console.log('user 1',user.toString().indexOf('fail')>0)
+  if(!user){
     console.log('ADDING user')
-    await addUser(
-      TEST_USER,
-      'Admin',
-      'User',
-      Role.ADMIN,
-    )
+    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,) as User
+    console.log('added user',addedUser)
+    sleep(1000)
     user  = await getUser(TEST_USER) as User
+    console.log('user 2',user)
   }
   console.log('user',user)
   expect(user).toBeDefined()
@@ -115,17 +114,29 @@ beforeAll(async () => {
 afterAll(async  () => {
 
   // TODO:
+  let organism = await getOrganism(TEST_ANIMAL) as Organism
 
-  // await deleteUser(TEST_USER)
-  // await deleteOrganism(TEST_ANIMAL)
-  //
-  // const user = await getUser(TEST_USER)
-  // const organism = await getOrganism(TEST_ANIMAL)
-  //
-  // console.log('output user',user)
-  // console.log('output organism',organism)
-  //
-  // expect(user).tibe
-  // expect(organism).toBeNull()
+  if(organism && organism.commonName===TEST_ANIMAL){
+    const totalDeleted = await deleteOrganismFeatures(TEST_ANIMAL)
+    console.log('deleted',totalDeleted)
+    organism = await deleteOrganism(TEST_ANIMAL) as Organism
+    console.log('deleted org',organism)
+  }
+  let user = await getUser(TEST_USER) as User
+  if(user && user.username===TEST_USER){
+    user = await deleteUser(TEST_USER) as User
+    console.log('deleted user',user)
+  }
+
+  // sleep(3000)
+
+  user = await getUser(TEST_USER) as User
+  organism = await getOrganism(TEST_ANIMAL) as Organism
+
+  console.log('output user',user)
+  console.log('output organism',organism)
+
+  expect(user).toBeUndefined()
+  expect(organism).toBeUndefined()
 })
 

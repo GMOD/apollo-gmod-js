@@ -40,7 +40,7 @@ test('Delete User', async () => {
   users = await loadUsers() as Array<User>
   let resultD = await getUser('trash2@bx.psu.edu')
   resultD = await getUser('trash2@bx.psu.edu')
-  expect(resultD.toString()).toContain('404')
+  expect(resultD).toBeUndefined()
 
 })
 

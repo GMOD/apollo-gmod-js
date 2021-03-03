@@ -104,3 +104,13 @@ export const deleteOrganism = async (organismIdentifier: string): Promise<Organi
     return error.message ? error.message : error
   }
 }
+export const deleteOrganismFeatures = async (organismIdentifier: string,sequences?:Array<string>|undefined): Promise<number | string> => {
+
+  try {
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganismFeatures`,{organism: organismIdentifier})
+    const { data } = await response
+    return data
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+}

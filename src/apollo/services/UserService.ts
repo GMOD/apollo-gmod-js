@@ -31,14 +31,19 @@ export const addUser = async (username:string,firstName:string,lastName:string,r
   }
 }
 
-export const getUser = async (username:string): Promise<User | string> => {
+export const getUser = async (username:string): Promise<User | string | undefined> => {
 
-  try {
+  try
+  {
+    console.log('getting user',username)
     const response = await axios.post( `${ApolloServer.getHost()}/user/getUser`,{username:username})
     const { data } = await response
+    console.log('got user',data)
     return data
   } catch (error) {
-    return error.message ? error.message : error
+    // console.error(error)
+    return undefined
+    // return error.message ? error.message : error
   }
 }
 export const deleteUser = async (username: string): Promise<User | string | null> => {
