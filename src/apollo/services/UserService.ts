@@ -41,13 +41,14 @@ export const getUser = async (username:string): Promise<User | string> => {
     return error.message ? error.message : error
   }
 }
-export const deleteUser = async (username: string): Promise<User | string> => {
+export const deleteUser = async (username: string): Promise<User | string | null> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/user/deleteUser`,{userToDelete: username})
     const { data } = await response
     return data
   } catch (error) {
-    return error.message ? error.message : error
+    return null
+    // return error.message ? error.message : error
   }
 }
