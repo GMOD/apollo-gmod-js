@@ -89,9 +89,9 @@ beforeAll(async () => {
     user  = await getUser(TEST_USER) as User
     console.log('user 2',user)
   }
-  console.log('user',user)
-  expect(user).toBeDefined()
-  expect(user.username).toEqual(TEST_USER)
+  // console.log('user',user)
+  // expect(user).toBeDefined()
+  // expect(user.username).toEqual(TEST_USER)
   //
   // 3. if organism with directory exists
   let organism:Organism = await getOrganism(TEST_ANIMAL) as Organism
@@ -106,9 +106,9 @@ beforeAll(async () => {
     )
     organism = await getOrganism(TEST_ANIMAL) as Organism
   }
-  console.log('organism',organism)
-  expect(organism).toBeDefined()
-  expect(organism.commonName).toEqual(TEST_ANIMAL)
+  // console.log('organism',organism)
+  // expect(organism).toBeDefined()
+  // expect(organism.commonName).toEqual(TEST_ANIMAL)
 })
 
 afterAll(async  () => {
