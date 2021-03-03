@@ -7,8 +7,7 @@ import {addTranscript} from './ProteinCodingService'
 import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
 import {deleteOrganism, getAllOrganisms, removeEmptyCommonDirectory} from './OrganismService'
 import {Organism} from '../domain/Organism'
-import {promisify} from 'util'
-export const sleep = promisify(setTimeout)
+import {sleep} from '../functions/Timing'
 
 
 /**

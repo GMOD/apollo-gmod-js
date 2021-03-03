@@ -1,8 +1,5 @@
-import {promisify} from 'util'
 import axios from 'axios'
 import {ApolloServer} from '../ApolloServer'
-
-export const sleep = promisify(setTimeout)
 
 /**
  * This is a simple test service class to test routes in the TestController for debugging only.

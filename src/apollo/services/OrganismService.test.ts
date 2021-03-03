@@ -13,8 +13,7 @@ import {
 } from './OrganismService'
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
-import { promisify } from 'util'
-export const sleep = promisify(setTimeout)
+import {sleep} from '../functions/Timing'
 
 const TEST_DATA = `${__dirname}/../../../test-data`
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
