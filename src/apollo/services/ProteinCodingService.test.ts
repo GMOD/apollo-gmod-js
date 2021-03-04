@@ -38,7 +38,7 @@ test('Add Transcript with UTR' , async() => {
   const returnObject = await addTranscript(transcriptObject)
   console.log('output test')
   console.log(returnObject)
-  // expect(returnObject).toEqual(validatedTranscriptReturn)
+  expect(returnObject).toEqual(validatedTranscriptReturn)
 
 
   // const returnedCodingArray = getCodingArray(returnObject)
