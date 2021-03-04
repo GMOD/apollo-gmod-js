@@ -1,9 +1,8 @@
 import axios from 'axios'
-import {ProteinCodingTranscript} from '../domain/ProteinCodingTranscript'
 import {ApolloServer} from '../ApolloServer'
 
 
-export const addTranscript = async (inputData:JSON): Promise<Array<ProteinCodingTranscript> | string> => {
+export const addTranscript = async (inputData:JSON): Promise<Array<string> | string> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/annotationEditor/addTranscript`,inputData)
