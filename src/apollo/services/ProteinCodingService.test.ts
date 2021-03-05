@@ -13,6 +13,7 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {Feature} from '../domain/Feature'
+import {GenomeAnnotationGroup} from "../domain/GenomeAnnotationGroup";
 
 const TEST_USER = 'test@test.com'
 const TEST_ANIMAL = 'testAnimal'
@@ -22,45 +23,30 @@ const TEST_DATA = `${__dirname}/../../../test-data`
  * From RequestHandlingServiceIntegrationSpec
  */
 test('Add Transcript with UTR' , async() => {
-
   // add transcript
-  // const inputJSON = { features:[{'location':{'fmin':734606,'strand':1,'fmax':735570},'name':'GB40828-RA','children':[{'location':{'fmin':734606,'strand':1,'fmax':734733},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735446,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734606,'strand':1,'fmax':734766},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734930,'strand':1,'fmax':735014},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':735245,'strand':1,'fmax':735570},'type':{'name':'exon','cv':{'name':'sequence'}}},{'location':{'fmin':734733,'strand':1,'fmax':735446},'type':{'name':'CDS','cv':{'name':'sequence'}}}],'type':{'name':'mRNA','cv':{'name':'sequence'}}}],'track':'Group1.10'}
-  // const transcript = await addTranscript(inputJSON) as Array<GenomeAnnotationGroup>
   const transcriptObject = <JSON><unknown>{ 'username':TEST_USER,'password':'secret','organism':TEST_ANIMAL,'track': 'Group1.10', 'features': [{'location':{'fmin':1216824,'fmax':1235616,'strand':1},'type':{'cv':{'name':'sequence'},'name':'mRNA'},'name':'GB40856-RA','children':[{'location':{'fmin':1235534,'fmax':1235616,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1216824,'fmax':1216850,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1224676,'fmax':1224823,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1228682,'fmax':1228825,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1235237,'fmax':1235396,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1235487,'fmax':1235616,'strand':1},'type':{'cv':{'name':'sequence'},'name':'exon'}},{'location':{'fmin':1216824,'fmax':1235534,'strand':1},'type':{'cv':{'name':'sequence'},'name':'CDS'}}]}], 'operation': 'add_transcript' }
   const validatedTranscriptReturn = {'features':[{'location':{'fmin':1216824,'strand':1,'fmax':1235616},'parent_type':{'name':'gene','cv':{'name':'sequence'}},'name':'GB40856-RA','children':[{'location':{'fmin':1235237,'strand':1,'fmax':1235396},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'@TRANSCRIPT_NAME@','type':{'name':'exon','cv':{'name':'sequence'}},'date_last_modified':1425583209540,'parent_id':'5A8C864885BC71606E120322CE0EC28C'},{'location':{'fmin':1216824,'strand':1,'fmax':1216850},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'0992325F0DD2290AB58EA37ECF2DA2E7','type':{'name':'exon','cv':{'name':'sequence'}},'date_last_modified':1425583209540,'parent_id':'5A8C864885BC71606E120322CE0EC28C'},{'location':{'fmin':1235487,'strand':1,'fmax':1235616},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'1C091FE87A8133803A69887F38FBDC4C','type':{'name':'exon','cv':{'name':'sequence'}},'date_last_modified':1425583209542,'parent_id':'5A8C864885BC71606E120322CE0EC28C'},{'location':{'fmin':1224676,'strand':1,'fmax':1224823},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'6D2E15D6DA759C523B79B96795927CAF','type':{'name':'exon','cv':{'name':'sequence'}},'date_last_modified':1425583209540,'parent_id':'5A8C864885BC71606E120322CE0EC28C'},{'location':{'fmin':1228682,'strand':1,'fmax':1228825},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'99C2A027C87DBDBC5536503D5C38F21C','type':{'name':'exon','cv':{'name':'sequence'}},'date_last_modified':1425583209540,'parent_id':'5A8C864885BC71606E120322CE0EC28C'},{'location':{'fmin':1216824,'strand':1,'fmax':1235534},'parent_type':{'name':'mRNA','cv':{'name':'sequence'}},'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'994B96C6594F5DB1B6C836E6E0EDE2A6','type':{'name':'CDS','cv':{'name':'sequence'}},'date_last_modified':1425583209540,'parent_id':'5A8C864885BC71606E120322CE0EC28C'}],'properties':[{'value':'demo','type':{'name':'owner','cv':{'name':'feature_property'}}}],'uniquename':'5A8C864885BC71606E120322CE0EC28C','type':{'name':'mRNA','cv':{'name':'sequence'}},'date_last_modified':1425583209602,'parent_id':'8B9E9AC4D0DB90464F26B2F77A1E09B4'}]}
 
   // // verify transcript
   console.log('input test')
   console.log(transcriptObject)
-  const inputFeature = new Feature(transcriptObject)
-  expect(inputFeature.location?.fmin).toEqual(3)
-  expect(inputFeature.children?.length).toEqual(3)
 
   const returnObject = await addTranscript(transcriptObject)
   console.log('output test')
   console.log(returnObject)
-  const returnFeature = new Feature(returnObject)
-  const validationFeature = new Feature(validatedTranscriptReturn)
-  // expect(returnFeature.location?.fmin).toEqual(validationFeature.location?.fmin)
-  // expect(returnFeature.location?.fmax).toEqual(validationFeature.location?.fmax)
-  // expect(returnFeature.children?.length).toEqual(validationFeature.children?.length)
+  const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
+  expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
+  const returnFeature = returnGenomeAnnotationGroup.features[0]
+  expect(returnFeature.name).toEqual('GB40856-RA-00001')
+  const validationGenomeAnnotationGroup = new GenomeAnnotationGroup(validatedTranscriptReturn)
+  expect(validationGenomeAnnotationGroup.features.length).toEqual(1)
+  const validationFeature = returnGenomeAnnotationGroup.features[0]
+  expect(returnFeature.location?.fmin).toEqual(validationFeature.location?.fmin)
+  expect(returnFeature.location?.fmax).toEqual(validationFeature.location?.fmax)
+  expect(returnFeature.children?.length).toEqual(validationFeature.children?.length)
   // expect(returnObject).toEqual(validatedTranscriptReturn)
-
-
-  // const returnedCodingArray = getCodingArray(returnObject)
-  // const validCodingArray = getCodingArray(validatedTranscriptReturn)
-  // expect(returnedCodingArray.length).toEqual(validCodingArray.length)
-  //
-  // console.log('returned coding array')
-  // console.log(returnedCodingArray)
-  // console.log('validated coding array')
-  // console.log(validCodingArray)
-  // parse JSON to get CDS uniquename
-
-  // set readThrough stop codon server
-
-  // get sequence
-
+  console.log('return Feature',JSON.stringify(returnFeature))
+  console.log('validation Feature',JSON.stringify(validationFeature))
 
 })
 
