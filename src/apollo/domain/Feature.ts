@@ -37,7 +37,7 @@ export class Feature {
     this.name = inputJson.name
     this.uniqueName = inputJson.uniqueName
     this.location = new FeatureLocation(inputJson.location,organism,sequence)
-    this.type =  new FeatureType(inputJson.type._name)
+    this.type =  new FeatureType(inputJson.type.name)
     this.dateLastUpdated = new Date(inputJson.date_last_modified)
     this.properties = inputJson.properties
 
