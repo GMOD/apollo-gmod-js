@@ -1,10 +1,13 @@
+/**
+ *  @jest-environment node
+ */
 // const TEST_USER = 'test@test.com'
 
 // import {GenomeAnnotationGroup} from './GenomeAnnotationGroup'
-import {Feature} from './Feature'
+import {GenomeAnnotationGroup} from './GenomeAnnotationGroup'
 
-const TEST_ANIMAL = 'testAnimal'
-const TEST_SEQUENCE = 'Group1.10'
+// const TEST_ANIMAL = 'testAnimal'
+// const TEST_SEQUENCE = 'Group1.10'
 const INPUT_OBJECT = {
   'features': [{
     'location': {'fmin': 1216824, 'strand': 1, 'fmax': 1235616},
@@ -69,7 +72,11 @@ const INPUT_OBJECT = {
 
 
 test('Get transcript from JSON', async () => {
-  const apollo3Feature = new Feature(INPUT_OBJECT)
+  // const apollo3Feature = new Feature(INPUT_OBJECT)
+  const genomeFeatures = new GenomeAnnotationGroup(INPUT_OBJECT)
+  const feature = genomeFeatures.features[0]
+  console.log('the features',feature)
+  expect(feature.name).toEqual('GB40856-RA')
   // const apollo2Feature = new Apollo2Feature(TRANSCRIPT_OBJECT)
   // const apollo3FeatureFromApollo2 = apollo2Feature.getFeature()
   // const apollo3Feature = new Feature(apollo2Feature)

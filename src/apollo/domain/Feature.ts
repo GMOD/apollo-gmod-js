@@ -9,34 +9,49 @@ export class Feature {
   description: string | undefined
   name: string | undefined
   uniqueName: string | undefined
-  children: Array<Feature> | undefined
-  parent: Array<Feature> | undefined
+  children: Array<Feature> = new Array<Feature>()
+  parents: Array<Feature>  = new Array<Feature>()
   type: FeatureType | undefined
   location: FeatureLocation | undefined
+  dateLastUpdated: Date | undefined
+  properties: any
 
-  constructor(inputJson?: any) {
+  constructor(inputJson?: any,organism?:string,sequence?:string) {
     // JSON.parse(inputJson.stringify())
     // console.log(inputJson.feature)
+    inputJson.organism = inputJson.organism ? inputJson.organism : organism
+    inputJson.sequence = inputJson.sequence ? inputJson.sequence : sequence
     this.parseFromJSON(inputJson)
   }
 
-  private parseFromJSON(inputJson: any) {
+  private parseFromJSON(inputJson: any):Feature {
     const organism = inputJson.organism
     const sequence = inputJson.sequence ? inputJson.sequence : inputJson.track
 
-    this.parseFeatures(inputJson.features,organism,sequence)
+    // this.parseFeatures(inputJson.features,organism,sequence)
     this.symbol = inputJson.symbol
     this.description = inputJson.description
     this.name = inputJson.name
     this.uniqueName = inputJson.uniqueName
+    this.location = new FeatureLocation(inputJson.location,organism,sequence)
+    this.type =  new FeatureType(inputJson.type.name)
+    this.dateLastUpdated = new Date(inputJson.date_last_modified)
+    this.properties = inputJson.properties
 
-  }
-
-  private parseFeatures(features:Array<any>, organism: string|undefined, sequence: string|undefined) {
-
-    for(const feature of features){
-
+    if(inputJson.children){
+      for(const child of inputJson.children){
+        this.children.push(this.parseFromJSON(child))
+      }
     }
 
+    if(inputJson.parent) {
+      for (const parent of inputJson.parent) {
+        this.parents.push(this.parseFromJSON(parent))
+      }
+    }
+
+    return this
+
   }
+
 }

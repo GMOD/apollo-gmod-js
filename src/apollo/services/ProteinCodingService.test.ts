@@ -1,7 +1,4 @@
 
-/**
- *  @jest-environment node
- */
 
 import {addTranscript} from './ProteinCodingService'
 import {
