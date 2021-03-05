@@ -76,20 +76,30 @@ const INPUT_OBJECT = {
 
 test('Get single feature from JSON',() => {
   const feature = new Feature(INPUT_OBJECT.features[0])
-  console.log('the features',feature,TEST_ANIMAL,TEST_SEQUENCE)
   expect(feature.name).toEqual('GB40856-RA')
-  console.log(JSON.stringify(feature.children))
-  // expect(feature.children).toEqual('GB40856-RA')
-
+  expect(feature.location?.fmin).toEqual(1216824)
+  expect(feature.location?.fmax).toEqual(1235616)
+  expect(feature.location?.strand).toEqual(1)
+  expect(feature.childrenByType('exon').length).toEqual(5)
+  expect(feature.childrenByType('CDS').length).toEqual(1)
+  const cds = feature.childrenByType('CDS')[0]
+  expect(cds.location?.fmin).toEqual(1216824)
+  expect(cds.location?.fmax).toEqual(1235534)
+  expect(cds.location?.strand).toEqual(1)
 })
 
-// test('Get transcript from JSON', () => {
-//   // const apollo3Feature = new Feature(INPUT_OBJECT)
-//   const genomeAnnotationGroup= new GenomeAnnotationGroup(INPUT_OBJECT)
-//   const feature = genomeAnnotationGroup.features[0]
-//   console.log('the features',feature)
-//   expect(feature.name).toEqual('GB40856-RA')
-//   // const apollo2Feature = new Apollo2Feature(TRANSCRIPT_OBJECT)
-//   // const apollo3FeatureFromApollo2 = apollo2Feature.getFeature()
-//   // const apollo3Feature = new Feature(apollo2Feature)
-// })
+test('Get transcript from JSON', () => {
+  // const apollo3Feature = new Feature(INPUT_OBJECT)
+  const genomeAnnotationGroup= new GenomeAnnotationGroup(INPUT_OBJECT)
+  expect(genomeAnnotationGroup.features.length).toEqual(1)
+  const feature = genomeAnnotationGroup.features[0]
+  expect(feature.name).toEqual('GB40856-RA')
+  expect(feature.location?.fmin).toEqual(1216824)
+  expect(feature.location?.fmax).toEqual(1235616)
+  expect(feature.childrenByType('exon').length).toEqual(5)
+  expect(feature.childrenByType('CDS').length).toEqual(1)
+  const cds = feature.childrenByType('CDS')[0]
+  expect(cds.location?.fmin).toEqual(1216824)
+  expect(cds.location?.fmax).toEqual(1235534)
+  expect(cds.location?.strand).toEqual(1)
+})

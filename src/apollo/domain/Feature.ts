@@ -29,8 +29,6 @@ export class Feature {
     const organism = inputJson.organism
     const sequence = inputJson.sequence ? inputJson.sequence : inputJson.track
 
-    console.log('parsing input',inputJson)
-
     // this.parseFeatures(inputJson.features,organism,sequence)
     this.symbol = inputJson.symbol
     this.description = inputJson.description
@@ -41,26 +39,25 @@ export class Feature {
     this.dateLastUpdated = new Date(inputJson.date_last_modified)
     this.properties = inputJson.properties
 
-    console.log('HAS children',inputJson.children)
     if(inputJson.children){
       for(const child of inputJson.children){
-        console.log('child',child)
-        const childFeature = new Feature(child)
-        console.log('parsed child feature',childFeature)
+        const childFeature = new Feature(child,organism,sequence)
         this.children.push(childFeature)
       }
     }
 
     if(inputJson.parent) {
       for (const parent of inputJson.parent) {
-        this.parents.push(new Feature(parent))
+        this.parents.push(new Feature(parent,organism,sequence))
       }
     }
 
-    console.log('output',this)
     return this
 
   }
 
+  childrenByType(type:string):Array<Feature>{
+    return this.children.filter( c => c.type?.name === type || c.type?.ontology === type )
+  }
 
 }

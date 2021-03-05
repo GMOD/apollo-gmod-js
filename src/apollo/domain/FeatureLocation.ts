@@ -8,10 +8,10 @@ export class FeatureLocation {
     organism:string|undefined
     
     constructor(inputJson:any,organism?:string,sequence?:string) {
-      this.fmin = inputJson.min
-      this.fmax = inputJson.min
-      this.strand = inputJson.min
-      this.sequence = sequence
-      this.organism = organism
+      this.fmin = inputJson.fmin
+      this.fmax = inputJson.fmax
+      this.strand = inputJson.strand
+      this.sequence = inputJson.sequence ? inputJson.sequence : sequence
+      this.organism = inputJson.organism ? inputJson.organism : organism
     }
 }
