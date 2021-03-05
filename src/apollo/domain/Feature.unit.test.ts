@@ -71,7 +71,7 @@ const INPUT_OBJECT = {
 }
 
 
-test('Get transcript from JSON', async () => {
+test('Get transcript from JSON', () => {
   // const apollo3Feature = new Feature(INPUT_OBJECT)
   const genomeFeatures = new GenomeAnnotationGroup(INPUT_OBJECT)
   const feature = genomeFeatures.features[0]

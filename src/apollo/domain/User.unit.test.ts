@@ -1,6 +1,6 @@
 import {User} from './User'
 
-test('User object test', async () => {
+test('User object test', () => {
   const user  = new User(
     {
       firstName: 'Admin',

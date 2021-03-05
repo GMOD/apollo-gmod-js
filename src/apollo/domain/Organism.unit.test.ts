@@ -1,6 +1,6 @@
 import {Organism} from './Organism'
 
-test('Organism object test', async () => {
+test('Organism object test', () => {
   const organism = new Organism(
     {
       commonName: 'temp_org',
