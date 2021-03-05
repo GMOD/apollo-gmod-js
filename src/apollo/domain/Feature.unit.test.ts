@@ -5,9 +5,10 @@
 
 // import {GenomeAnnotationGroup} from './GenomeAnnotationGroup'
 import {GenomeAnnotationGroup} from './GenomeAnnotationGroup'
+import {Feature} from './Feature'
 
-// const TEST_ANIMAL = 'testAnimal'
-// const TEST_SEQUENCE = 'Group1.10'
+const TEST_ANIMAL = 'testAnimal'
+const TEST_SEQUENCE = 'Group1.10'
 const INPUT_OBJECT = {
   'features': [{
     'location': {'fmin': 1216824, 'strand': 1, 'fmax': 1235616},
@@ -21,7 +22,9 @@ const INPUT_OBJECT = {
       'type': {'name': 'exon', 'cv': {'name': 'sequence'}},
       'date_last_modified': 1425583209540,
       'parent_id': '5A8C864885BC71606E120322CE0EC28C'
-    }, {
+    }
+    ,
+    {
       'location': {'fmin': 1216824, 'strand': 1, 'fmax': 1216850},
       'parent_type': {'name': 'mRNA', 'cv': {'name': 'sequence'}},
       'properties': [{'value': 'demo', 'type': {'name': 'owner', 'cv': {'name': 'feature_property'}}}],
@@ -61,7 +64,8 @@ const INPUT_OBJECT = {
       'type': {'name': 'CDS', 'cv': {'name': 'sequence'}},
       'date_last_modified': 1425583209540,
       'parent_id': '5A8C864885BC71606E120322CE0EC28C'
-    }],
+    }
+    ],
     'properties': [{'value': 'demo', 'type': {'name': 'owner', 'cv': {'name': 'feature_property'}}}],
     'uniquename': '5A8C864885BC71606E120322CE0EC28C',
     'type': {'name': 'mRNA', 'cv': {'name': 'sequence'}},
@@ -70,14 +74,22 @@ const INPUT_OBJECT = {
   }]
 }
 
-
-test('Get transcript from JSON', () => {
-  // const apollo3Feature = new Feature(INPUT_OBJECT)
-  const genomeFeatures = new GenomeAnnotationGroup(INPUT_OBJECT)
-  const feature = genomeFeatures.features[0]
-  console.log('the features',feature)
+test('Get single feature from JSON',() => {
+  const feature = new Feature(INPUT_OBJECT.features[0])
+  console.log('the features',feature,TEST_ANIMAL,TEST_SEQUENCE)
   expect(feature.name).toEqual('GB40856-RA')
-  // const apollo2Feature = new Apollo2Feature(TRANSCRIPT_OBJECT)
-  // const apollo3FeatureFromApollo2 = apollo2Feature.getFeature()
-  // const apollo3Feature = new Feature(apollo2Feature)
+  console.log(JSON.stringify(feature.children))
+  // expect(feature.children).toEqual('GB40856-RA')
+
 })
+
+// test('Get transcript from JSON', () => {
+//   // const apollo3Feature = new Feature(INPUT_OBJECT)
+//   const genomeAnnotationGroup= new GenomeAnnotationGroup(INPUT_OBJECT)
+//   const feature = genomeAnnotationGroup.features[0]
+//   console.log('the features',feature)
+//   expect(feature.name).toEqual('GB40856-RA')
+//   // const apollo2Feature = new Apollo2Feature(TRANSCRIPT_OBJECT)
+//   // const apollo3FeatureFromApollo2 = apollo2Feature.getFeature()
+//   // const apollo3Feature = new Feature(apollo2Feature)
+// })

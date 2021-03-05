@@ -5,6 +5,7 @@ import {FeatureLocation} from './FeatureLocation'
 
 export class Feature {
 
+
   symbol: string | undefined
   description: string | undefined
   name: string | undefined
@@ -28,30 +29,38 @@ export class Feature {
     const organism = inputJson.organism
     const sequence = inputJson.sequence ? inputJson.sequence : inputJson.track
 
+    console.log('parsing input',inputJson)
+
     // this.parseFeatures(inputJson.features,organism,sequence)
     this.symbol = inputJson.symbol
     this.description = inputJson.description
     this.name = inputJson.name
     this.uniqueName = inputJson.uniqueName
     this.location = new FeatureLocation(inputJson.location,organism,sequence)
-    this.type =  new FeatureType(inputJson.type.name)
+    this.type =  new FeatureType(inputJson.type._name)
     this.dateLastUpdated = new Date(inputJson.date_last_modified)
     this.properties = inputJson.properties
 
+    console.log('HAS children',inputJson.children)
     if(inputJson.children){
       for(const child of inputJson.children){
-        this.children.push(this.parseFromJSON(child))
+        console.log('child',child)
+        const childFeature = new Feature(child)
+        console.log('parsed child feature',childFeature)
+        this.children.push(childFeature)
       }
     }
 
     if(inputJson.parent) {
       for (const parent of inputJson.parent) {
-        this.parents.push(this.parseFromJSON(parent))
+        this.parents.push(new Feature(parent))
       }
     }
 
+    console.log('output',this)
     return this
 
   }
+
 
 }
