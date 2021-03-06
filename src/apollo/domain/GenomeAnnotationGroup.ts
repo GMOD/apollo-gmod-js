@@ -25,7 +25,7 @@ export class GenomeAnnotationGroup {
 
   private parseFeatures(features:Array<any>, organism: string|undefined, sequence: string|undefined) {
 
-    const storedFeatures = this.features
+    const storedFeatures = []
     for(const feature of features){
       storedFeatures.push(new Feature(feature,organism,sequence))
     }
