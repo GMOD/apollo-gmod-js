@@ -20,7 +20,7 @@ const TEST_ANIMAL = 'testAnimal'
 const TEST_DATA = `${__dirname}/../../../test-data`
 
 /**
- * From RequestHandlingServiceIntegrationSpec
+ * From RequestHandlingServiceIntegrationSpec 'add transcript with UTR'
  */
 test('Add Transcript with UTR' , async() => {
   // add transcript
@@ -44,25 +44,10 @@ test('Add Transcript with UTR' , async() => {
   expect(returnFeature.location?.fmin).toEqual(validationFeature.location?.fmin)
   expect(returnFeature.location?.fmax).toEqual(validationFeature.location?.fmax)
   expect(returnFeature.children?.length).toEqual(validationFeature.children?.length)
-  // expect(returnObject).toEqual(validatedTranscriptReturn)
   console.log('return Feature',JSON.stringify(returnFeature))
   console.log('validation Feature',JSON.stringify(validationFeature))
 
 })
-
-function getCodingArray(jsonObject:any):any{
-  const mrnaArray = jsonObject.features
-  // assert mrnaArray.length === 1
-  // assert 1 == mrnaArray.size()
-  return mrnaArray[0].children
-}
-
-// beforeEach( async () => {
-// beforeEach( async () => {
-// })
-//
-// afterEach( async () => {
-// })
 
 beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
