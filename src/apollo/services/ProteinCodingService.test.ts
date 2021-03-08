@@ -13,11 +13,12 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {Feature} from '../domain/Feature'
-import {GenomeAnnotationGroup} from "../domain/GenomeAnnotationGroup";
+import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 
 const TEST_USER = 'test@test.com'
 const TEST_ANIMAL = 'testAnimal'
-const TEST_DATA = `${__dirname}/../../../test-data`
+const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
+const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
 
 /**
  * From RequestHandlingServiceIntegrationSpec 'add transcript with UTR'
@@ -29,11 +30,11 @@ test('Add Transcript with UTR' , async() => {
 
   // // verify transcript
   console.log('input test')
-  console.log(transcriptObject)
+  console.log(JSON.stringify(transcriptObject))
 
   const returnObject = await addTranscript(transcriptObject)
   console.log('output test')
-  console.log(returnObject)
+  console.log(JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
@@ -78,7 +79,7 @@ beforeAll(async () => {
   if(!organism || organism.commonName !==TEST_ANIMAL){
     console.log('add organism')
     await addOrganismWithDirectory(
-      `${TEST_DATA}/sequences/honeybee-Group1.10/`,
+      `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
       TEST_ANIMAL
     )
     organism = await getOrganism(TEST_ANIMAL) as Organism

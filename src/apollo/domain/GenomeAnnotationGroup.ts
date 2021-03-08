@@ -5,7 +5,7 @@ import {Feature} from './Feature'
 
 export class GenomeAnnotationGroup {
   
-  private _features: Array<Feature> = new Array<Feature>()
+  features: Array<Feature> = new Array<Feature>()
 
   constructor(inputJson?:any) {
     const organism = inputJson.organism
@@ -13,15 +13,6 @@ export class GenomeAnnotationGroup {
 
     this.parseFeatures(inputJson.features,organism,sequence)
   }
-
-  get features(): Array<Feature> {
-    return this._features
-  }
-
-  set features(value: Array<Feature>) {
-    this._features = value
-  }
-
 
   private parseFeatures(features:Array<any>, organism: string|undefined, sequence: string|undefined) {
 
