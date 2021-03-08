@@ -111,6 +111,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     }],
   }
   const returnObject = await addTranscript(transcriptObject)
+  console.log('return object',JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
@@ -121,7 +122,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(returnFeature.name).toEqual('GB40828-RA-00001')
   expect(returnFeature.children.length).toEqual(6)
   // expect(returnFeature.parents.length).toEqual(1)
-  const uniqueName = returnFeature.uniqueName
+  console.log('unique name',JSON.stringify(returnFeature))
 
   // const setReadThroughCommand = {}
   const setReadThroughCommand = <JSON><unknown>{
@@ -129,13 +130,15 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     password: 'secret',
     organism: TEST_ANIMAL,
     features: [ {
-      readthrough_stop_codon:true,
-      uniquename:returnFeature.uniqueName
+      'readthrough_stop_codon':true,
+      'uniquename': returnFeature.uniqueName
     }]
 
   }
+  console.log('input command',JSON.stringify(setReadThroughCommand))
   // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand,'setReadthroughStopCodon')
+  console.log('stop codon readthrough object')
   console.log(JSON.stringify(stopCodonReadthroughObject))
  
   // const sequenceCommandObject = {}
