@@ -41,7 +41,7 @@ beforeEach( async () => {
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
-  await sleep(1000)
+  await sleep(2000)
   const finalOrganisms = await getAllOrganisms() as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
