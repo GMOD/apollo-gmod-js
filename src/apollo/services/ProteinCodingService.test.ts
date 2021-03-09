@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
->>>>>>> master
 import {addTranscript, annotationEditorCommand} from './ProteinCodingService'
 import {
   addOrganismWithDirectory,
@@ -146,12 +141,12 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     organism: TEST_ANIMAL,
     features: [ {
       'readthrough_stop_codon':true,
-      'uniquename': returnFeature.uniquename
+      'uniqueName': returnFeature.uniqueName
     }]
 
   }
   console.log('input command',JSON.stringify(setReadThroughCommand))
-  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
+  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniqueName\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand,'setReadthroughStopCodon')
   console.log('stop codon readthrough object')
   console.log(JSON.stringify(stopCodonReadthroughObject))

@@ -5,7 +5,7 @@ test('Organism object test', () => {
     {
       commonName: 'temp_org',
       directory: '/some/temp',
-      uniquename: 'asdf-123',
+      uniqueName: 'asdf-123',
     }
   )
   // user.firstName = 'Bob'
@@ -13,7 +13,7 @@ test('Organism object test', () => {
     {
       commonName: 'temp_org',
       directory: '/some/temp',
-      uniquename: 'asdf-123',
+      uniqueName: 'asdf-123',
     }
 
   )
