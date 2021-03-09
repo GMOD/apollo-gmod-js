@@ -11,7 +11,9 @@ export class GenomeAnnotationGroup {
     const organism = inputJson.organism
     const sequence = inputJson.sequence ? inputJson.sequence : inputJson.track
 
-    this.parseFeatures(inputJson.features,organism,sequence)
+    if(inputJson.features){
+      this.parseFeatures(inputJson.features,organism,sequence)
+    }
   }
 
   private parseFeatures(features:Array<any>, organism: string|undefined, sequence: string|undefined) {
