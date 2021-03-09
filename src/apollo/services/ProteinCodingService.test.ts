@@ -131,7 +131,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     organism: TEST_ANIMAL,
     features: [ {
       'readthrough_stop_codon':true,
-      'uniquename': returnFeature.uniqueName
+      'uniquename': returnFeature.uniquename
     }]
 
   }

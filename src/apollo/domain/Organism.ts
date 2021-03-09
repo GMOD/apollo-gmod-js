@@ -4,7 +4,7 @@
 export class Organism{
   constructor(input:any) {
     this.commonName = input.commonName
-    this.uniqueName = input.uniqueName
+    this.uniquename = input.uniquename
     this.searchdb = input.searchdb
     this.genomeFasta = input.genomeFasta
     this.genomeFastaIndex = input.genomeFastaIndex
@@ -20,7 +20,7 @@ export class Organism{
 
   commonName: string
   sequences: number
-  uniqueName: string
+  uniquename: string
   searchdb: string
   genomeFasta: string
   genomeFastaIndex: string

@@ -61,7 +61,7 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
       password:'password',
       directory,
       commonName,
-      uniqueName:'uniqueName'
+      uniquename:'uniquename'
     })
     const { data } = await response
     return data
