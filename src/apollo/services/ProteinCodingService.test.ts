@@ -66,12 +66,28 @@ test('Add Transcript with UTR' , async() => {
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
   console.log('annotations found 1',genomeAnnotationFound1)
   expect(genomeAnnotationFound1.features.length).toEqual(1)
+  const addedFeature1 = genomeAnnotationFound1.features[0]
+  expect(addedFeature1.location?.fmin).toEqual(validationFeature.location?.fmin)
+  expect(addedFeature1.location?.fmax).toEqual(validationFeature.location?.fmax)
+  // expect(addedFeature1.children?.length).toEqual(validationFeature.children?.length)
+  expect(addedFeature1.uniqueName).toBeDefined()
+  const uniqueNameToDelete = addedFeature1.uniqueName
 
 
   // 4. delete feature
+  const deleteFeatureCommand = <JSON><unknown>{ 'username':TEST_USER,'password':'secret','organism':TEST_ANIMAL,'features': [{'uniqueName':uniqueNameToDelete}] }
+  const deleteFeatureResponse = await annotationEditorCommand(deleteFeatureCommand,'deleteFeature')
+  console.log('delete features response',deleteFeatureResponse)
+
+
 
 
   // 5. get features on sequence (should be none)
+  const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand,'getFeatures')
+  console.log('annotations found response 2',JSON.stringify(annotationsFoundResponse2))
+  const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
+  console.log('annotations found 2',genomeAnnotationFound2)
+  expect(genomeAnnotationFound0.features.length).toEqual(0)
 
 })
 
