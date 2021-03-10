@@ -82,9 +82,7 @@ beforeAll(async () => {
   // 0. if user does not exist
   let user = await getUser(TEST_USER) as User
   if(!user){
-    console.info('ADDING user')
     const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,) as User
-    console.info('added user',addedUser)
     sleep(1000)
     user  = await getUser(TEST_USER) as User
   }
@@ -94,7 +92,6 @@ beforeAll(async () => {
 
   // 4. add organism directory
   if(!organism || organism.commonName !==TEST_ANIMAL){
-    console.info('add organism')
     await addOrganismWithDirectory(
       `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
       TEST_ANIMAL
