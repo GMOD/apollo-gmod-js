@@ -35,10 +35,8 @@ export const getUser = async (username:string): Promise<User | string | undefine
 
   try
   {
-    console.log('getting user',username)
     const response = await axios.post( `${ApolloServer.getHost()}/user/getUser`,{username:username})
     const { data } = await response
-    console.log('got user',data)
     return data
   } catch (error) {
     // console.error(error)
