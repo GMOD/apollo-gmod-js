@@ -27,7 +27,7 @@ jobs:
         rm -rf `pwd`/temp-apollo-test-data
         cp -r `pwd`/test-data `pwd`/temp-apollo-test-data
     - name: Run Apollo
-      run: docker run --memory=8g -d -p 8080:8080 -v `pwd`/temp-apollo-test-data/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
+      run: docker run --memory=4g -d -p 8080:8080 -v `pwd`/temp-apollo-test-data/:/data/ -e "WEBAPOLLO_DEBUG=true" quay.io/gmod/apollo3server:latest
     - name: Test Server up
       run: |
         curl http://localhost:8080/user/loadUsers || true
