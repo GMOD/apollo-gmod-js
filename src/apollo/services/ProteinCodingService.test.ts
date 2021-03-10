@@ -12,7 +12,6 @@ import {addUser, deleteUser, getUser} from './UserService'
 import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
-import {Feature} from '../domain/Feature'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 
 const TEST_USER = 'test@test.com'
