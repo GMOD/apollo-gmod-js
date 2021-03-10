@@ -73,7 +73,7 @@ test('Add Transcript with UTR' , async() => {
   const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
   expect(genomeAnnotationFound0.features.length).toEqual(0)
 
-})
+},10000)
 
 beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
