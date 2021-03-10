@@ -25,15 +25,12 @@ const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 beforeAll( async () => {
-  const result = await removeEmptyCommonDirectory()
-  console.log(result)
+  await removeEmptyCommonDirectory()
 })
 
 afterAll( async () => {
   // fse.removeSync(LOCAL_APOLLO_DATA)
-  const result = await removeEmptyCommonDirectory()
-  console.log(result)
-
+  await removeEmptyCommonDirectory()
 })
 
 beforeEach( async () => {
