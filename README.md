@@ -6,7 +6,6 @@
 ## Apollo-gmod-js
 
 
-
 This is a javascript library that interacts with the [Apollo 3](https://github.com/GMOD/Apollo3Server/) API.  
 
 ### Testing:
@@ -80,3 +79,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 # Notes
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
