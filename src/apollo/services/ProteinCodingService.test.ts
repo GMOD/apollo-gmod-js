@@ -238,6 +238,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand, 'setReadthroughStopCodon')
   console.log('stop codon readthrough object')
   console.log(JSON.stringify(stopCodonReadthroughObject))
+  expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
   // const sequenceCommandObject = {}
   // const stopCodonReadthroughObject = await getSequenceForFeatures(transcriptObject)

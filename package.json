@@ -36,7 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "yarn run eslint src/**/*.ts src/**/*.tsx",
-    "test:unit": "react-scripts test --env=node --watchAll --testMatch '**/*.unit.test.ts'",
+    "test:unit": "react-scripts test --env=node --watchAll --testMatch --coverage '**/*.unit.test.ts'",
     "test": "react-scripts test --env=node --testMatch '**/*.test.ts'",
     "test:docker": "DOCKER_CI=true  react-scripts test --env=node  --runInBand",
     "test:nowatch": "react-scripts test --env=node --watchAll=false  --runInBand",
