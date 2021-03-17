@@ -217,7 +217,8 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(returnFeature.location?.strand).toEqual(1)
   expect(returnFeature.type?.name).toEqual('mRNA')
   expect(returnFeature.name).toEqual('GB40828-RA-00001')
-  expect(returnFeature.children.length).toEqual(6)
+  // NOTE: there are only 3 exons here (and one CDS) as the 3 exons overlap with each other from the original test case
+  expect(returnFeature.children.length).toEqual(4)
   // expect(returnFeature.parents.length).toEqual(1)
   console.log('unique name', JSON.stringify(returnFeature))
 
