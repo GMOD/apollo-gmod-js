@@ -12,9 +12,11 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
+import {getSequenceForFeatures} from './SequenceService'
 
 const TEST_USER = 'test@test.com'
-const TEST_ANIMAL = 'testAnimal'
+const TEST_ORGANISM = 'testAnimal'
+const TEST_SEQUENCE = 'honeybee-Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
 
@@ -28,7 +30,7 @@ test('Add Transcript with UTR', async () => {
   const getFeaturesCommand = <JSON><unknown>{
     'username': TEST_USER,
     'password': 'secret',
-    'organism': TEST_ANIMAL,
+    'organism': TEST_ORGANISM,
     'sequence': 'Group1.10'
   }
   const annotationsFoundResponse0 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
@@ -40,7 +42,7 @@ test('Add Transcript with UTR', async () => {
   const addTranscriptCommand = <JSON><unknown>{
     'username': TEST_USER,
     'password': 'secret',
-    'organism': TEST_ANIMAL,
+    'organism': TEST_ORGANISM,
     'sequence': 'Group1.10',
     'features': [{
       'location': {'fmin': 1216824, 'fmax': 1235616, 'strand': 1},
@@ -159,7 +161,7 @@ test('Add Transcript with UTR', async () => {
   const deleteFeatureCommand = <JSON><unknown>{
     'username': TEST_USER,
     'password': 'secret',
-    'organism': TEST_ANIMAL,
+    'organism': TEST_ORGANISM,
     'features': [{'uniqueName': uniqueNameToDelete}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteFeatureCommand, 'deleteFeature')
@@ -179,7 +181,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   const transcriptObject = <JSON><unknown>{
     'username': TEST_USER,
     'password': 'secret',
-    'organism': TEST_ANIMAL,
+    'organism': TEST_ORGANISM,
     'sequence': 'Group1.10',
     'features': [{
       'location': {'fmin': 734606, 'strand': 1, 'fmax': 735570},
@@ -218,6 +220,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(returnFeature.type?.name).toEqual('mRNA')
   expect(returnFeature.name).toEqual('GB40828-RA-00001')
   // NOTE: there are only 3 exons here (and one CDS) as the 3 exons overlap with each other from the original test case
+  // expect(returnFeature.children.length).toEqual(4)
   expect(returnFeature.children.length).toEqual(4)
   // expect(returnFeature.parents.length).toEqual(1)
   console.log('unique name', JSON.stringify(returnFeature))
@@ -226,7 +229,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   const setReadThroughCommand = <JSON><unknown>{
     username: TEST_USER,
     password: 'secret',
-    organism: TEST_ANIMAL,
+    organism: TEST_ORGANISM,
     features: [{
       'readthrough_stop_codon': true,
       'uniqueName': returnFeature.uniqueName
@@ -241,19 +244,15 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
   // TODO
-  // const sequenceCommandObject = {}
-  // const stopCodonReadthroughObject = await getSequenceForFeatures(transcriptObject)
-  // when: "a request is sent for the CDS sequence with the read through stop codon"
-  // String getSequenceString = "{ ${testCredentials} \"operation\":\"get_sequence\",\"features\":[{\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"type\":\"@SEQUENCE_TYPE@\"}"
-  // String getCdsSequenceString = getSequenceString.replaceAll("@UNIQUENAME@", transcript.uniqueName)
-  // getCdsSequenceString = getCdsSequenceString.replaceAll("@SEQUENCE_TYPE@", FeatureStringEnum.TYPE_CDS.value)
-  // JSONObject commandObject = JSON.parse(getCdsSequenceString) as JSONObject
-  // JSONObject getCDSSequenceReturnObject = sequenceService.getSequenceForFeatures(commandObject)
-  //
+  // const getSequenceCommand = <JSON><unknown>{ 'features':[{'uniquename':returnFeature.uniqueName}],'type':'cds'}
+  const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
+  console.log('get sequence for features')
+  console.log(JSON.stringify(getCDSSequenceReturnObject))
+  
   // then: "we should get the anticipated CDS sequence"
-  // assert getCDSSequenceReturnObject.residues != null
-  // String expectedCdsSequence = "ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAAGATTAA"
-  // assert getCDSSequenceReturnObject.residues == expectedCdsSequence
+  expect(getCDSSequenceReturnObject.residues).toBeDefined()
+  const expectedCdsSequence = 'ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAAGATTAA'
+  expect(getCDSSequenceReturnObject.residues).toEqual(expectedCdsSequence)
 
 
 })
@@ -271,26 +270,26 @@ beforeAll(async () => {
   }
 
   // 3. if organism with directory exists
-  let organism: Organism = await getOrganism(TEST_ANIMAL) as Organism
+  let organism: Organism = await getOrganism(TEST_ORGANISM) as Organism
 
   // 4. add organism directory
-  if (!organism || organism.commonName !== TEST_ANIMAL) {
+  if (!organism || organism.commonName !== TEST_ORGANISM) {
     await addOrganismWithDirectory(
       `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
-      TEST_ANIMAL
+      TEST_ORGANISM
     )
-    organism = await getOrganism(TEST_ANIMAL) as Organism
+    organism = await getOrganism(TEST_ORGANISM) as Organism
   }
 })
 
 afterAll(async () => {
 
   // TODO:
-  let organism = await getOrganism(TEST_ANIMAL) as Organism
+  let organism = await getOrganism(TEST_ORGANISM) as Organism
 
-  if (organism && organism.commonName === TEST_ANIMAL) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ANIMAL)
-    organism = await deleteOrganism(TEST_ANIMAL) as Organism
+  if (organism && organism.commonName === TEST_ORGANISM) {
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM)
+    organism = await deleteOrganism(TEST_ORGANISM) as Organism
   }
   let user = await getUser(TEST_USER) as User
   if (user && user.username === TEST_USER) {
@@ -300,7 +299,6 @@ afterAll(async () => {
   // sleep(3000)
 
   user = await getUser(TEST_USER) as User
-  organism = await getOrganism(TEST_ANIMAL) as Organism
-
+  organism = await getOrganism(TEST_ORGANISM) as Organism
 })
 
