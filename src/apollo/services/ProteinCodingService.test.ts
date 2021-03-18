@@ -240,8 +240,20 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   console.log(JSON.stringify(stopCodonReadthroughObject))
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
+  // TODO
   // const sequenceCommandObject = {}
   // const stopCodonReadthroughObject = await getSequenceForFeatures(transcriptObject)
+  // when: "a request is sent for the CDS sequence with the read through stop codon"
+  // String getSequenceString = "{ ${testCredentials} \"operation\":\"get_sequence\",\"features\":[{\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"type\":\"@SEQUENCE_TYPE@\"}"
+  // String getCdsSequenceString = getSequenceString.replaceAll("@UNIQUENAME@", transcript.uniqueName)
+  // getCdsSequenceString = getCdsSequenceString.replaceAll("@SEQUENCE_TYPE@", FeatureStringEnum.TYPE_CDS.value)
+  // JSONObject commandObject = JSON.parse(getCdsSequenceString) as JSONObject
+  // JSONObject getCDSSequenceReturnObject = sequenceService.getSequenceForFeatures(commandObject)
+  //
+  // then: "we should get the anticipated CDS sequence"
+  // assert getCDSSequenceReturnObject.residues != null
+  // String expectedCdsSequence = "ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAAGATTAA"
+  // assert getCDSSequenceReturnObject.residues == expectedCdsSequence
 
 
 })
