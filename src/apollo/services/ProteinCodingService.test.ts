@@ -134,6 +134,8 @@ test('Add Transcript with UTR', async () => {
     }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
+  console.log('return object`')
+  console.log(JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   console.log('return features',returnGenomeAnnotationGroup.features[0].children)
@@ -250,9 +252,9 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   console.log(JSON.stringify(getCDSSequenceReturnObject))
   
   // then: "we should get the anticipated CDS sequence"
-  expect(getCDSSequenceReturnObject.residues).toBeDefined()
+  expect(getCDSSequenceReturnObject).toBeDefined()
   const expectedCdsSequence = 'ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAAGATTAA'
-  expect(getCDSSequenceReturnObject.residues).toEqual(expectedCdsSequence)
+  expect(getCDSSequenceReturnObject).toEqual(expectedCdsSequence)
 
 
 })
