@@ -227,6 +227,16 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   // expect(returnFeature.parents.length).toEqual(1)
   console.log('unique name', JSON.stringify(returnFeature))
 
+  const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
+  console.log('get sequence for features')
+  console.log(JSON.stringify(getCDSSequenceReturnObjectInitial))
+
+  // then: "we should get the anticipated CDS sequence"
+  expect(getCDSSequenceReturnObjectInitial).toBeDefined()
+  const expectedCdsSequenceInitial = 'ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAA'
+  expect(getCDSSequenceReturnObjectInitial).toEqual(expectedCdsSequenceInitial)
+
+
   // const setReadThroughCommand = {}
   const setReadThroughCommand = <JSON><unknown>{
     username: TEST_USER,
@@ -245,12 +255,10 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   console.log(JSON.stringify(stopCodonReadthroughObject))
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
-  // TODO
-  // const getSequenceCommand = <JSON><unknown>{ 'features':[{'uniquename':returnFeature.uniqueName}],'type':'cds'}
   const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
   console.log('get sequence for features')
   console.log(JSON.stringify(getCDSSequenceReturnObject))
-  
+
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObject).toBeDefined()
   const expectedCdsSequence = 'ATGGAATCTGCTATTGTTCATCTTGAACAAAGCGTGCAAAAGGCTGATGGAAAACTAGACATGATTGCATGGCAAATTGATGCTTTTGAAAAAGAATTTGAAGATCCTGGTAGTGAGATTTCTGTGCTTCGTCTATTACGGTCTGTTCATCAAGTCACAAAAGATTATCAGAACCTTCGGCAAGAAATATTGGAGGTTCAACAATTGCAAAAGCAACTTTCAGATTCCCTTAAAGCACAATTATCTCAAGTGCATGGACATTTTAACTTATTACGCAATAAAATAGTAGGACAAAATAAAAATCTACAATTAAAATAAGATTAA'
