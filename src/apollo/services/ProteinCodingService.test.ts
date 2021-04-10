@@ -188,25 +188,32 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     'features': [{
       'location': {'fmin': 734606, 'strand': 1, 'fmax': 735570},
       'name': 'GB40828-RA',
-      'children': [{
-        'location': {'fmin': 734606, 'strand': 1, 'fmax': 734733},
-        'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
-      }, {
-        'location': {'fmin': 735446, 'strand': 1, 'fmax': 735570},
-        'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
-      }, {
-        'location': {'fmin': 734606, 'strand': 1, 'fmax': 734766},
-        'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
-      }, {
-        'location': {'fmin': 734930, 'strand': 1, 'fmax': 735014},
-        'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
-      }, {
-        'location': {'fmin': 735245, 'strand': 1, 'fmax': 735570},
-        'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
-      }, {
-        'location': {'fmin': 734733, 'strand': 1, 'fmax': 735446},
-        'type': {'name': 'CDS', 'cv': {'name': 'sequence'}}
-      }],
+      'children': [
+        // {
+        //   'location': {'fmin': 734606, 'strand': 1, 'fmax': 734733},
+        //   'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
+        // },
+        {
+          'location': {'fmin': 734606, 'strand': 1, 'fmax': 734766},
+          'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
+        },
+        {
+          'location': {'fmin': 735446, 'strand': 1, 'fmax': 735570},
+          'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
+        },
+        {
+          'location': {'fmin': 734930, 'strand': 1, 'fmax': 735014},
+          'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
+        },
+        {
+          'location': {'fmin': 734733, 'strand': 1, 'fmax': 735446},
+          'type': {'name': 'CDS', 'cv': {'name': 'sequence'}}
+        },
+        {
+          'location': {'fmin': 735245, 'strand': 1, 'fmax': 735570},
+          'type': {'name': 'exon', 'cv': {'name': 'sequence'}}
+        },
+      ],
       'type': {'name': 'mRNA', 'cv': {'name': 'sequence'}}
     }],
   }
