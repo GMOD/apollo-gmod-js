@@ -145,6 +145,7 @@ test('Add Transcript with UTR', async () => {
   expect(returnFeature.location?.fmin).toEqual(validationFeature.location?.fmin)
   expect(returnFeature.location?.fmax).toEqual(validationFeature.location?.fmax)
   expect(returnFeature.children?.length).toEqual(validationFeature.children?.length)
+  console.log(returnFeature.children.length)
 
 
   // 3. get features on sequence (should be this one)
@@ -167,12 +168,13 @@ test('Add Transcript with UTR', async () => {
     'features': [{'uniqueName': uniqueNameToDelete}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteFeatureCommand, 'deleteFeature')
+  console.log('delete feature response)')
 
 
   // 5. get features on sequence (should be none)
   const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
-  expect(genomeAnnotationFound0.features.length).toEqual(0)
+  expect(genomeAnnotationFound2.features.length).toEqual(0)
 
 }, 10000)
 
