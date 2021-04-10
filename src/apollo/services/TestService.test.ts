@@ -18,8 +18,8 @@ const doAllParts1 = async (): Promise<Array<any> | string> => {
 }
 
 test('Validate test class', async() => {
-
   const allParts = await doAllParts1()
+  console.log(JSON.stringify(allParts))
   expect(allParts.length).toEqual(1)
   expect(allParts[0].name).toEqual('jill')
 })
