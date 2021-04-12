@@ -85,10 +85,12 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   expect(addedFeature1.children?.length).toEqual(3)
   expect(addedFeature1.uniqueName).toBeDefined()
 
-  // TODO: find the right exon using a filter
-  const rightExon = addedFeature1.children[2]
+  const rightExon = addedFeature1.children.filter( c => {
+    return c.location?.fmin === 19636 && c.type?.name === 'exon'
+  })[0]
   console.log('delete right exon', rightExon)
-  const uniqueNameToDelete = rightExon.uniqueName
+  const exonDeleteUniqueName = rightExon.uniqueName
+  const transcriptUniqueName = addedFeature1.uniqueName
 
 
   // 4. delete feature
@@ -96,7 +98,7 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
     'username': TEST_USER,
     'password': 'secret',
     'organism': TEST_ORGANISM,
-    'features': [{'uniqueName': uniqueNameToDelete}]
+    'features': [{'uniqueName': transcriptUniqueName},{'uniqueName': exonDeleteUniqueName}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteExonCommand, 'deleteExon')
   console.log('delete feature response)')
