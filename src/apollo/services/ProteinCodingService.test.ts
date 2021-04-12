@@ -93,12 +93,14 @@ test('Add Transcript with UTR', async () => {
 
   // 3. get features on sequence (should be this one)
   const annotationsFoundResponse1 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
+  console.log('annotaiton features resopnse')
+  console.log(JSON.stringify(annotationsFoundResponse1))
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
   expect(genomeAnnotationFound1.features.length).toEqual(1)
   const addedFeature1 = genomeAnnotationFound1.features[0]
   expect(addedFeature1.location?.fmin).toEqual(1216824)
   expect(addedFeature1.location?.fmax).toEqual(1235616)
-  expect(returnFeature.children?.length).toEqual(6)
+  expect(addedFeature1.children?.length).toEqual(6)
   console.log('returned added transcript')
   console.log(genomeAnnotationFound1)
   expect(addedFeature1.uniqueName).toBeDefined()
