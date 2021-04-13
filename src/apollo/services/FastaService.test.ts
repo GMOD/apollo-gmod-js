@@ -1,17 +1,17 @@
 import {addTranscript, annotationEditorCommand} from './ProteinCodingService'
+import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
+import {getSequenceForFeatures} from './SequenceService'
 import {
-  addOrganismWithDirectory,
-  deleteOrganism,
+  addOrganismWithDirectory, deleteOrganism,
   deleteOrganismFeatures,
   getOrganism,
   removeEmptyCommonDirectory
 } from './OrganismService'
-import {Organism} from '../domain/Organism'
 import {addUser, deleteUser, getUser} from './UserService'
 import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
-import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
+import {Organism} from '../domain/Organism'
 
 const TEST_USER = 'test@test.com'
 const TEST_ORGANISM = 'testAnimal'
@@ -19,10 +19,10 @@ const TEST_SEQUENCE = 'Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
 
-/**
- * From ExonServiceIntegrationSpec
- */
-test('Create 2 exons on a transcript and delete one, confirm boundaries mapped', async () => {
+/*
+* From FastaHandlerServiceIntegrationSpec
+*/
+test('write a fasta of a simple gene model', async () => {
   // add transcript
   // // verify transcript
   // 1. get features on sequence (should be none)
@@ -36,78 +36,76 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   const genomeAnnotationFound0 = new GenomeAnnotationGroup(annotationsFoundResponse0)
   expect(genomeAnnotationFound0.features.length).toEqual(0)
 
-
   // 2. add transcript
   const addTranscriptCommand = <JSON><unknown>{
     'username': TEST_USER,
     'password': 'secret',
     'organism': TEST_ORGANISM,
     'sequence': TEST_SEQUENCE,
-    'features': [{
-      'location': {'fmin': 19636, 'fmax': 31167, 'strand': -1},
-      'type': {'cv': {'name': 'sequence'}, 'name': 'mRNA'},
-      'name': 'GB40789-RA',
-      'orig_id': 'GB40789-RA',
-      'children': [{
-        'location': {'fmin': 19636, 'fmax': 20199, 'strand': -1},
-        'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-      }, {
-        'location': {'fmin': 30857, 'fmax': 31167, 'strand': -1},
-        'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-      }, {
-        'location': {'fmin': 19636, 'fmax': 31167, 'strand': -1},
-        'type': {'cv': {'name': 'sequence'}, 'name': 'CDS'}
+    'features': [
+      {
+        'location': {'fmin': 1216824, 'fmax': 1235616, 'strand': 1},
+        'type': {'cv': {'name': 'sequence'}, 'name': 'mRNA'},
+        'name': 'GB40856-RA',
+        'children': [
+          {
+            'location': {'fmin': 1216824, 'fmax': 1235534, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'CDS'}
+          },
+          {
+            'location': {'fmin': 1216824, 'fmax': 1216850, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          },
+          {
+            'location': {'fmin': 1224676, 'fmax': 1224823, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          },
+          {
+            'location': {'fmin': 1228682, 'fmax': 1228825, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          },
+          {
+            'location': {'fmin': 1235237, 'fmax': 1235396, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          },
+          // {
+          //   'location': {'fmin': 1235534, 'fmax': 1235616, 'strand': 1},
+          //   'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          // },
+          {
+            'location': {'fmin': 1235487, 'fmax': 1235616, 'strand': 1},
+            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+          },
+        ]
       }]
-    }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
+
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
-  expect(returnFeature.name).toEqual('GB40789-RA-00001')
+  expect(returnFeature.name).toEqual('GB40856-RA-00001')
   // 2 exons, 1 CDS, 2 non-canonical five-prime splice sites, 1 non-canonical three-prime splice sites
-  expect(returnFeature.children.length).toEqual(3)
+  expect(returnFeature.children.length).toEqual(6)
 
 
-  // 3. get features on sequence (should be this one)
+  // 3. get features to confirm it is addd
   const annotationsFoundResponse1 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
   expect(genomeAnnotationFound1.features.length).toEqual(1)
   const addedFeature1 = genomeAnnotationFound1.features[0]
-  expect(addedFeature1.location?.fmin).toEqual(19636)
-  expect(addedFeature1.location?.fmax).toEqual(31167)
-  expect(addedFeature1.children?.length).toEqual(3)
+  expect(addedFeature1.location?.fmin).toEqual(1216824)
+  expect(addedFeature1.location?.fmax).toEqual(1235616)
+  expect(addedFeature1.children?.length).toEqual(6)
   expect(addedFeature1.uniqueName).toBeDefined()
 
-  const rightExon = addedFeature1.children.filter( c => {
-    return c.location?.fmin === 30857 && c.type?.name === 'exon'
-  })[0]
-  const exonDeleteUniqueName = rightExon.uniqueName
-  const transcriptUniqueName = addedFeature1.uniqueName
+  // 4. get and confirm sequence
+  const proteinSequenceResidues = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'peptide') as string
+  expect(proteinSequenceResidues).toEqual('MARDIHRQSLRTEQPSGLDTGGVRFELSRALDLWARNSKLTFQEVNSDRADILVYFHRGYHGDGYPFDGRGQILAHAFFPGRDRGGDVHFDEEEIWLLQGDNNEEGTSLFAVAAHEFGHSLGLAHSSVPGALMYPWYQGLSSNYELPEDDRHGIQQMYEINQDIFFFIFFSHD')
 
-
-  // 4. delete feature
-  const deleteExonCommand = <JSON><unknown>{
-    'username': TEST_USER,
-    'password': 'secret',
-    'organism': TEST_ORGANISM,
-    'features': [{'uniqueName': transcriptUniqueName},{'uniqueName': exonDeleteUniqueName}]
-  }
-  const deleteFeatureResponse = await annotationEditorCommand(deleteExonCommand, 'deleteExon')
-
-
-  // 5. get features on sequence (should be none)
-  const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
-  const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
-  expect(genomeAnnotationFound2.features[0].children?.length).toEqual(2)
-  expect(genomeAnnotationFound2.features[0].location?.fmin).toEqual(19636)
-  expect(genomeAnnotationFound2.features[0].location?.fmax).toEqual(20199)
-
-},
-10000
-)
-
-
+  // 5. write file?
+  // TODO: . .
+})
 beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
 
