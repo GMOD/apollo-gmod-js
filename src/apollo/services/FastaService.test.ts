@@ -1,4 +1,4 @@
-import {addTranscript, annotationEditorCommand} from './ProteinCodingService'
+import {addTranscript} from './ProteinCodingService'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 import {getSequenceForFeatures} from './SequenceService'
 import {
@@ -12,6 +12,7 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {Organism} from '../domain/Organism'
+import {annotationEditorCommand} from "./ApolloAPIService";
 
 const TEST_USER = 'test@test.com'
 const TEST_ORGANISM = 'testAnimal'
