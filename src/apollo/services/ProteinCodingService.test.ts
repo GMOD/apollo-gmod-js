@@ -77,32 +77,23 @@ test('Add Transcript with UTR', async () => {
     }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
-  console.log('return object`')
-  console.log(JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
-  console.log('return features',returnGenomeAnnotationGroup.features[0].children)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
   expect(returnFeature.name).toEqual('GB40856-RA-00001')
   expect(returnFeature.location?.fmin).toEqual(1216824)
   expect(returnFeature.location?.fmax).toEqual(1235616)
   expect(returnFeature.children?.length).toEqual(6)
-  console.log('added transcript')
-  console.log(returnFeature)
 
 
   // 3. get features on sequence (should be this one)
   const annotationsFoundResponse1 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
-  console.log('annotaiton features resopnse')
-  console.log(JSON.stringify(annotationsFoundResponse1))
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
   expect(genomeAnnotationFound1.features.length).toEqual(1)
   const addedFeature1 = genomeAnnotationFound1.features[0]
   expect(addedFeature1.location?.fmin).toEqual(1216824)
   expect(addedFeature1.location?.fmax).toEqual(1235616)
   expect(addedFeature1.children?.length).toEqual(6)
-  console.log('returned added transcript')
-  console.log(genomeAnnotationFound1)
   expect(addedFeature1.uniqueName).toBeDefined()
   const uniqueNameToDelete = addedFeature1.uniqueName
 
@@ -115,8 +106,6 @@ test('Add Transcript with UTR', async () => {
     'features': [{'uniqueName': uniqueNameToDelete}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteFeatureCommand, 'deleteFeature')
-  console.log('delete feature response)')
-
 
   // 5. get features on sequence (should be none)
   const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
@@ -167,10 +156,8 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     }],
   }
   const returnObject = await addTranscript(transcriptObject)
-  console.log('return object', JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
-  // console.log('return features 2',returnGenomeAnnotationGroup.features[0].children)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
   expect(returnFeature.location?.fmin).toEqual(734606)
   expect(returnFeature.location?.fmax).toEqual(735570)
@@ -181,11 +168,8 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   // expect(returnFeature.children.length).toEqual(4)
   expect(returnFeature.children.length).toEqual(4)
   // expect(returnFeature.parents.length).toEqual(1)
-  console.log('unique name', JSON.stringify(returnFeature))
 
   const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
-  console.log('get sequence for features')
-  console.log(JSON.stringify(getCDSSequenceReturnObjectInitial))
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObjectInitial).toBeDefined()
@@ -204,16 +188,11 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     }]
 
   }
-  console.log('input command', JSON.stringify(setReadThroughCommand))
   // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniqueName\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand, 'setReadthroughStopCodon')
-  console.log('stop codon readthrough object')
-  console.log(JSON.stringify(stopCodonReadthroughObject))
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
   const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
-  console.log('get sequence for features')
-  console.log(JSON.stringify(getCDSSequenceReturnObject))
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObject).toBeDefined()
