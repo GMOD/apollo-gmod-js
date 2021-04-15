@@ -14,3 +14,15 @@ export const addTranscript = async (inputData:JSON): Promise<Array<string> | str
 
 }
 
+export const addFeature = async (inputData:JSON): Promise<Array<string> | string> => {
+
+  try {
+    const response = await axios.post( `${ApolloServer.getHost()}/annotationEditor/addFeature`,inputData)
+    const { data } = await response
+    return data
+  } catch (error) {
+    return error.message ? error.message : error
+  }
+
+}
+
