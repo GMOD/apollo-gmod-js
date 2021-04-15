@@ -181,26 +181,55 @@ test('write a gff3 of a simple gene model', async () => {
     output:'text',
     sequences:[TEST_SEQUENCE],
   }
-  const gff3Text = await writeFile(writeFileObject) as string
-  const gff3Lines = gff3Text.split('\n')
+  // plain GF3
+  let gff3Text = await writeFile(writeFileObject) as string
+  let gff3Lines = gff3Text.split('\n')
   expect(gff3Lines[0]).toEqual('##gff-version 3')
   expect(gff3Lines[1]).toContain('Group1.10\t.\tgene\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
   expect(gff3Lines[1]).toContain('Name=GB40856-RA')
   expect(gff3Lines[2]).toContain('Group1.10\t.\tmRNA\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
   expect(gff3Lines[2]).toContain('Name=GB40856-RA-00001')
   // 5 exons, 5 CDS, 1 gene, 1 mrNA
-  const codingGff3Lines = gff3Lines.filter( f => !f.startsWith('#') && f.length>0)
+  let codingGff3Lines = gff3Lines.filter( f => !f.startsWith('#') && f.length>0)
   expect(codingGff3Lines.length).toEqual(12)
-  const exonLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\texon'))
+  let exonLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\texon'))
   expect(exonLines.length).toEqual(5)
   expect(exonLines.filter( f => f.indexOf('\t.\t+\t.')).length).toEqual(5)
   expect(codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\tCDS')).length).toEqual(5)
-  const cdsLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\tCDS'))
+  let cdsLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\tCDS'))
   expect(cdsLines.length).toEqual(5)
   expect(cdsLines.filter( f => f.indexOf('\t.\t+\t0')>0).length).toEqual(1)
   expect(cdsLines.filter( f => f.indexOf('\t.\t+\t1')>0).length).toEqual(2)
   expect(cdsLines.filter( f => f.indexOf('\t.\t+\t2')>0).length).toEqual(2)
 
+
+  // export genomic sequence now
+  writeFileObject.exportGff3Fasta = true
+  gff3Text = await writeFile(writeFileObject) as string
+  gff3Lines = gff3Text.split('\n')
+  expect(gff3Lines[0]).toEqual('##gff-version 3')
+  expect(gff3Lines[1]).toContain('Group1.10\t.\tgene\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
+  expect(gff3Lines[1]).toContain('Name=GB40856-RA')
+  expect(gff3Lines[2]).toContain('Group1.10\t.\tmRNA\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
+  expect(gff3Lines[2]).toContain('Name=GB40856-RA-00001')
+  // 5 exons, 5 CDS, 1 gene, 1 mrNA
+  expect(gff3Lines.length).toEqual(23438)
+  codingGff3Lines = gff3Lines.filter( f => f.startsWith('Group1.10\t'))
+  expect(codingGff3Lines.length).toEqual(12)
+  exonLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\texon'))
+  expect(exonLines.length).toEqual(5)
+  expect(exonLines.filter( f => f.indexOf('\t.\t+\t.')).length).toEqual(5)
+  expect(codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\tCDS')).length).toEqual(5)
+  cdsLines = codingGff3Lines.filter( f => f.startsWith('Group1.10\t.\tCDS'))
+  expect(cdsLines.length).toEqual(5)
+  expect(cdsLines.filter( f => f.indexOf('\t.\t+\t0')>0).length).toEqual(1)
+  expect(cdsLines.filter( f => f.indexOf('\t.\t+\t1')>0).length).toEqual(2)
+  expect(cdsLines.filter( f => f.indexOf('\t.\t+\t2')>0).length).toEqual(2)
+
+  let sequenceIndex = gff3Lines.indexOf('##FASTA')
+  expect(sequenceIndex).toBeGreaterThan(12)
+  expect(gff3Lines.indexOf('>Group1.10')).toEqual(sequenceIndex+1)
+  expect(gff3Lines.indexOf('GCCAGGGAATGGCTTGTCATTAGGGACAACTTGTCAAGTCCCTAGCTTTTTATGATGTAT')).toEqual(sequenceIndex+2)
 
 
 },10000)
