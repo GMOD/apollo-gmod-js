@@ -21,62 +21,62 @@ const TEST_SEQUENCE = 'Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
 
+// 2. add transcript
+const addTranscriptCommand = <JSON><unknown>{
+  'username': TEST_USER,
+  'password': 'secret',
+  'organism': TEST_ORGANISM,
+  'sequence': TEST_SEQUENCE,
+  'features': [
+    {
+      'location': {'fmin': 1216824, 'fmax': 1235616, 'strand': 1},
+      'type': {'cv': {'name': 'sequence'}, 'name': 'mRNA'},
+      'name': 'GB40856-RA',
+      'children': [
+        {
+          'location': {'fmin': 1216824, 'fmax': 1235534, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'CDS'}
+        },
+        {
+          'location': {'fmin': 1216824, 'fmax': 1216850, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+        },
+        {
+          'location': {'fmin': 1224676, 'fmax': 1224823, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+        },
+        {
+          'location': {'fmin': 1228682, 'fmax': 1228825, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+        },
+        {
+          'location': {'fmin': 1235237, 'fmax': 1235396, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+        },
+        {
+          'location': {'fmin': 1235487, 'fmax': 1235616, 'strand': 1},
+          'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
+        },
+      ]
+    }]
+}
+
+// 1. get features on sequence (should be none)
+const getFeaturesCommand = <JSON><unknown>{
+  'username': TEST_USER,
+  'password': 'secret',
+  'organism': TEST_ORGANISM,
+  'sequence': TEST_SEQUENCE
+}
 /*
 * From FastaHandlerServiceIntegrationSpec
 */
 test('write a fasta of a simple gene model', async () => {
   // add transcript
-  // // verify transcript
-  // 1. get features on sequence (should be none)
-  const getFeaturesCommand = <JSON><unknown>{
-    'username': TEST_USER,
-    'password': 'secret',
-    'organism': TEST_ORGANISM,
-    'sequence': TEST_SEQUENCE
-  }
   const annotationsFoundResponse0 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound0 = new GenomeAnnotationGroup(annotationsFoundResponse0)
   expect(genomeAnnotationFound0.features.length).toEqual(0)
 
-  // 2. add transcript
-  const addTranscriptCommand = <JSON><unknown>{
-    'username': TEST_USER,
-    'password': 'secret',
-    'organism': TEST_ORGANISM,
-    'sequence': TEST_SEQUENCE,
-    'features': [
-      {
-        'location': {'fmin': 1216824, 'fmax': 1235616, 'strand': 1},
-        'type': {'cv': {'name': 'sequence'}, 'name': 'mRNA'},
-        'name': 'GB40856-RA',
-        'children': [
-          {
-            'location': {'fmin': 1216824, 'fmax': 1235534, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'CDS'}
-          },
-          {
-            'location': {'fmin': 1216824, 'fmax': 1216850, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-          },
-          {
-            'location': {'fmin': 1224676, 'fmax': 1224823, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-          },
-          {
-            'location': {'fmin': 1228682, 'fmax': 1228825, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-          },
-          {
-            'location': {'fmin': 1235237, 'fmax': 1235396, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-          },
-          {
-            'location': {'fmin': 1235487, 'fmax': 1235616, 'strand': 1},
-            'type': {'cv': {'name': 'sequence'}, 'name': 'exon'}
-          },
-        ]
-      }]
-  }
   const returnObject = await addTranscript(addTranscriptCommand)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
 
@@ -166,14 +166,17 @@ test('write a fasta of a simple gene model', async () => {
 
   writeFileObject.type = 'GFF3'
   const gff3Text = await writeFile(writeFileObject) as string
-  let gff3Lines = ''
   console.log('gff3 text')
   console.log(gff3Text)
-  // expect(gff3Text[0]).toEqual('>')
-  // expect(gff3Text).toContain('(mRNA) 522 residues [Group1.10:1216825-1235616 + strand] [cds] name=GB40856-RA-00001')
-  gff3Lines = gff3Text.split('\n')
+  let gff3Lines = gff3Text.split('\n')
   expect(gff3Lines[0]).toEqual('##gff-version 3')
-  
+  expect(gff3Lines[1]).toContain('Group1.10\t.\tgene\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
+  expect(gff3Lines[1]).toContain('Name=GB40856-RA')
+  expect(gff3Lines[2]).toContain('Group1.10\t.\tmRNA\t1216825\t1235616\t.\t+\t.\towner=test@test.com;')
+  expect(gff3Lines[2]).toContain('Name=GB40856-RA-00001')
+  console.log('filtered lines',gff3Lines.filter( f => !f.startsWith('#')))
+  expect(gff3Lines.filter( f => !f.startsWith('#') && f.length>0).length).toEqual(8)
+
   // cdsSequences =''
   // for( let i = 1 ; i < gff3Lines.length ; i++){
   //   cdsSequences += gff3Lines[i]
