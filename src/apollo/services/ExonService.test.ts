@@ -12,7 +12,7 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
-import {annotationEditorCommand} from "./ApolloAPIService";
+import {annotationEditorCommand} from './ApolloAPIService'
 
 const TEST_USER = 'test@test.com'
 const TEST_ORGANISM = 'testAnimal'
