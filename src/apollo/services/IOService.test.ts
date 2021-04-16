@@ -364,11 +364,11 @@ test('write a gff3 with an added pseudogene', async () => {
   // 3. get features to confirm it is added
   const annotationsFoundResponse1 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
-  expect(genomeAnnotationFound1.features.length).toEqual(2)
+  expect(genomeAnnotationFound1.features.length).toEqual(3)
   const addedFeature1 = genomeAnnotationFound1.features.filter(f => f.uniqueName === pseudogeneUniqueName)[0]
   expect(addedFeature1.location?.fmin).toEqual(433518)
   expect(addedFeature1.location?.fmax).toEqual(437436)
-  expect(addedFeature1.children?.length).toEqual(3)
+  expect(addedFeature1.children?.length).toEqual(3) // CDS not here, so just 3 exons
   expect(addedFeature1.uniqueName).toBeDefined()
 
   const writeFileObject = <any><unknown>{
@@ -391,7 +391,7 @@ test('write a gff3 with an added pseudogene', async () => {
   expect(gff3Lines[2]).toContain('Name=GB40815-RA-00001')
   // 5 exons, 5 CDS, 1 gene, 1 mrNA
   const codingGff3Lines = gff3Lines.filter(f => !f.startsWith('#') && f.length > 0)
-  expect(codingGff3Lines.length).toEqual(12 + 5) // 12 original + 3 exons + transcript + pseudogene
+  expect(codingGff3Lines.length).toEqual(12 + 5 + 1 ) // 12 original + 3 exons + transcript + pseudogene + repeat_region
   const exonLines = codingGff3Lines.filter(f => f.startsWith('Group1.10\t.\texon'))
   expect(exonLines.length).toEqual(5 + 3)
   expect(exonLines.filter(f => f.indexOf('\t.\t+\t.')).length).toEqual(5 + 3)
