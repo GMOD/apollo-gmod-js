@@ -273,18 +273,15 @@ test('write a gff3 with an added pseudogene', async () => {
 
   const returnObject = await addFeature(addPseudogeneCommand)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
-  console.log('return pseudogene object ', JSON.stringify(returnObject))
-
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
-  console.log('return feature',JSON.stringify(returnFeature))
   expect(returnFeature.name).toEqual('GB40815-RA-00001')
   // 2 exons, 1 CDS, 2 non-canonical five-prime splice sites, 1 non-canonical three-prime splice sites
   expect(returnFeature.children.length).toEqual(3)
   const pseudogeneUniqueName = returnFeature.uniqueName
 
 
-  // 3. get features to confirm it is addd
+  // 3. get features to confirm it is added
   const annotationsFoundResponse1 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound1 = new GenomeAnnotationGroup(annotationsFoundResponse1)
   expect(genomeAnnotationFound1.features.length).toEqual(2)
@@ -305,8 +302,8 @@ test('write a gff3 with an added pseudogene', async () => {
     sequences: [TEST_SEQUENCE],
   }
   // plain GF3
-  const gff3Text = await writeFile(writeFileObject) as string
-  const gff3Lines = gff3Text.split('\n')
+  let gff3Text = await writeFile(writeFileObject) as string
+  let gff3Lines = gff3Text.split('\n')
   expect(gff3Lines[0]).toEqual('##gff-version 3')
   expect(gff3Lines[1]).toContain('Group1.10\t.\tpseudogene\t433519\t437436\t.\t+\t.\towner=test@test.com;')
   expect(gff3Lines[1]).toContain('Name=GB40815-RA')
@@ -325,6 +322,13 @@ test('write a gff3 with an added pseudogene', async () => {
   expect(cdsLines.filter(f => f.indexOf('\t.\t+\t1') > 0).length).toEqual(2)
   expect(cdsLines.filter(f => f.indexOf('\t.\t+\t2') > 0).length).toEqual(2)
 
+  writeFileObject.exportGff3Fasta = true
+  gff3Text = await writeFile(writeFileObject) as string
+  gff3Lines = gff3Text.split('\n')
+  const sequenceIndex = gff3Lines.indexOf('##FASTA')
+  expect(sequenceIndex).toBeGreaterThan(17)
+  expect(gff3Lines.indexOf('>Group1.10')).toEqual(sequenceIndex + 1)
+  expect(gff3Lines.indexOf('GCCAGGGAATGGCTTGTCATTAGGGACAACTTGTCAAGTCCCTAGCTTTTTATGATGTAT')).toEqual(sequenceIndex + 2)
 })
 
 
