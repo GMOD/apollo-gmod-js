@@ -25,10 +25,10 @@ export const getCommonDirectory = async  (): Promise<string> => {
   }
 }
 
-export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
+export const getAllOrganisms = async (inputData:JSON): Promise<Array<Organism> | string> => {
 
   try {
-    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms`)
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/findAllOrganisms`,inputData)
     const { data } = await response
     return data
   } catch (error) {
@@ -36,16 +36,16 @@ export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
   }
 }
 
-export const getOrganism = async (lookup:string): Promise<Organism | string> => {
+export const getOrganism = async (inputData:JSON): Promise<Organism | string> => {
 
   try {
-    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms?organism=${lookup}`)
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/findAllOrganisms`,inputData)
     const { data } = await response
     if(data.length>1){
-      return `Error: duplicate organisms return for '${lookup}' organism ${data}`
+      return `Error: duplicate organisms return for ${inputData} organism ${data}`
     }
     if(data.length==0){
-      return `Error: No organisms returned for '${lookup}'`
+      return `Error: No organisms returned for '${inputData}'`
     }
     return data[0]
   } catch (error) {
