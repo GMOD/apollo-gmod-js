@@ -19,6 +19,7 @@ const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
+const authCommand = <JSON><unknown>{username:TEST_USER,password:'asf',organism:TEST_ORGANISM}
 
 /**
  * From ExonServiceIntegrationSpec
@@ -121,7 +122,7 @@ beforeAll(async () => {
   }
 
   // 3. if organism with directory exists
-  let organism: Organism = await getOrganism(TEST_ORGANISM) as Organism
+  let organism: Organism = await getOrganism(authCommand) as Organism
 
   // 4. add organism directory
   if (!organism || organism.commonName !== TEST_ORGANISM) {
@@ -129,17 +130,17 @@ beforeAll(async () => {
       `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
       TEST_ORGANISM
     )
-    organism = await getOrganism(TEST_ORGANISM) as Organism
+    organism = await getOrganism(authCommand) as Organism
   }
 })
 
 afterAll(async () => {
 
   // TODO:
-  let organism = await getOrganism(TEST_ORGANISM) as Organism
+  let organism = await getOrganism(authCommand) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM)
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,TEST_USER)
     organism = await deleteOrganism(TEST_ORGANISM) as Organism
   }
   let user = await getUser(TEST_USER) as User
@@ -150,6 +151,6 @@ afterAll(async () => {
   // sleep(3000)
 
   user = await getUser(TEST_USER) as User
-  organism = await getOrganism(TEST_ORGANISM) as Organism
+  organism = await getOrganism(authCommand) as Organism
 })
 
