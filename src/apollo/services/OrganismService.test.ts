@@ -39,7 +39,6 @@ afterAll( async () => {
 
 beforeEach( async () => {
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
-  console.log('ALL organisms',allOrganisms)
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName)
   }
