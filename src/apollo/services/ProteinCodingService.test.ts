@@ -13,7 +13,7 @@ import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 import {getSequenceForFeatures} from './SequenceService'
-import {annotationEditorCommand} from "./ApolloAPIService";
+import {annotationEditorCommand} from './ApolloAPIService'
 
 const TEST_USER = 'test@test.com'
 const TEST_ORGANISM = 'testAnimal'
@@ -78,15 +78,10 @@ test('Add Transcript with UTR', async () => {
       ]
     }]
   }
-  console.log('a')
   const returnObject = await addTranscript(addTranscriptCommand)
-  console.log('b',returnObject)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
-  console.log('c',returnGenomeAnnotationGroup)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
-  console.log('d')
   const returnFeature = returnGenomeAnnotationGroup.features[0]
-  console.log('e',returnFeature)
   expect(returnFeature.name).toEqual('GB40856-RA-00001')
   expect(returnFeature.location?.fmin).toEqual(1216824)
   expect(returnFeature.location?.fmax).toEqual(1235616)
