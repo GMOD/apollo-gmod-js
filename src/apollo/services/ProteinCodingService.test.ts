@@ -14,8 +14,10 @@ import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 import {getSequenceForFeatures} from './SequenceService'
 import {annotationEditorCommand} from './ApolloAPIService'
+import {ADMIN_PASS, ADMIN_USER} from './UserService.test'
 
 const TEST_USER = 'test@test.com'
+const TEST_PASS = 'secret'
 const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'honeybee-Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
@@ -31,7 +33,7 @@ test('Add Transcript with UTR', async () => {
   // 1. get features on sequence (should be none)
   const getFeaturesCommand = <JSON><unknown>{
     'username': TEST_USER,
-    'password': 'secret',
+    'password': TEST_PASS,
     'organism': TEST_ORGANISM,
     'sequence': 'Group1.10'
   }
@@ -79,6 +81,7 @@ test('Add Transcript with UTR', async () => {
     }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
+  console.log('return object',returnObject)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
@@ -209,11 +212,11 @@ beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
 
   // 0. if user does not exist
-  let user = await getUser(TEST_USER) as User
+  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,) as User
+    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User',ADMIN_USER,ADMIN_PASS, Role.ADMIN,) as User
     sleep(1000)
-    user = await getUser(TEST_USER) as User
+    user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
 
   // 3. if organism with directory exists
@@ -238,14 +241,14 @@ afterAll(async () => {
     const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,TEST_USER)
     organism = await deleteOrganism(TEST_ORGANISM) as Organism
   }
-  let user = await getUser(TEST_USER) as User
+  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (user && user.username === TEST_USER) {
-    user = await deleteUser(TEST_USER) as User
+    user = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
 
   // sleep(3000)
 
-  user = await getUser(TEST_USER) as User
+  user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   organism = await getOrganism(authCommand) as Organism
 })
 
