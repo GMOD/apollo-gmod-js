@@ -6,9 +6,8 @@
 import {addUser, deleteUser, getUser, loadUsers} from './UserService'
 import {User} from '../domain/User'
 import {sleep} from '../functions/Timing'
+import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
-export const ADMIN_USER = 'admin@local.host'
-export const ADMIN_PASS = 'password'
 
 const TEST_USER = 'trash2@bx.psu.ed'
 

@@ -1,14 +1,12 @@
 import {getServerInfo, updateCommonPath} from './AnnotatorService'
-
-const TEST_USER = 'admin@local.host'
-const TEST_PASS = 'password'
+import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
 beforeEach( async () => {
-  await updateCommonPath('apollo_data',TEST_USER,TEST_PASS)
+  await updateCommonPath('apollo_data',ADMIN_USER,ADMIN_PASS)
 })
 
 afterEach( async () => {
-  await updateCommonPath('apollo_data',TEST_USER,TEST_PASS)
+  await updateCommonPath('apollo_data',ADMIN_USER,ADMIN_PASS)
   // await sleep(1000)
 })
 
@@ -31,13 +29,13 @@ test('Update the default common path', async () => {
   const root = commonPath.root
   expect(commonPath.absolutePath).toEqual(root+'/'+commonPath.relativePath)
 
-  const updatedCommonPath:any = await updateCommonPath('abc123',TEST_USER,TEST_PASS)
+  const updatedCommonPath:any = await updateCommonPath('abc123',ADMIN_USER,ADMIN_PASS)
   expect(updatedCommonPath.relativePath).toEqual('abc123')
   expect(updatedCommonPath.directory).toEqual(true)
   expect(updatedCommonPath.writable).toEqual(true)
 
 
-  const revertCommonPath:any = await updateCommonPath('apollo_data',TEST_USER,TEST_PASS)
+  const revertCommonPath:any = await updateCommonPath('apollo_data',ADMIN_USER,ADMIN_PASS)
   expect(revertCommonPath.relativePath).toEqual('apollo_data')
 
 })

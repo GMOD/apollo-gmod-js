@@ -13,7 +13,7 @@ import {Role} from '../domain/Role'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 import {getSequenceForFeatures} from './SequenceService'
 import {annotationEditorCommand} from './ApolloAPIService'
-import {ADMIN_PASS, ADMIN_USER} from './UserService.test'
+import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
 const TEST_USER = 'test@test.com'
 const TEST_PASS = 'secret'
