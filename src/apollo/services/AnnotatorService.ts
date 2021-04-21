@@ -18,11 +18,15 @@ export const getServerInfo = async (): Promise<string> => {
 /**
  * Returns common path and local server info
  */
-export const updateCommonPath = async (directory:string): Promise<string> => {
+export const updateCommonPath = async (directory:string,username:string,password:string): Promise<string> => {
   try {
     const response = await axios.post(
       `${ApolloServer.getHost()}/annotator/updateCommonPath`,
-      {directory:directory}
+      {
+        directory:directory,
+        username,
+        password
+      }
     )
     const { data } = await response
     return data
