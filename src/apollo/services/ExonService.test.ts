@@ -65,7 +65,6 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
     }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
-  console.log('return object ',returnObject)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
@@ -99,12 +98,10 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
     'features': [{'uniquename': transcriptUniqueName},{'uniquename': exonDeleteUniqueName}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteExonCommand, 'deleteExon')
-  console.log('delete exon response',deleteFeatureResponse)
 
 
   // 5. get features on sequence (should be none)
   const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
-  console.log('exon response',JSON.stringify(annotationsFoundResponse2))
   const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
   expect(genomeAnnotationFound2.features[0].children?.length).toEqual(2)
   // validate 1 exons and 1 CDS and mins
