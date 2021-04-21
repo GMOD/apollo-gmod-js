@@ -5,11 +5,11 @@
 
 import {addUser, deleteUser, getUser, loadUsers} from './UserService'
 import {User} from '../domain/User'
-import {sleep} from '../functions/Timing'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
 
 const TEST_USER = 'trash2@bx.psu.ed'
+const TEST_PASS = 'topsecret'
 
 
 test('Load Users', async () => {
@@ -37,9 +37,8 @@ test('Get User', async () => {
 
 test('Delete User', async () => {
   const hasUser = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
-  const resultA = await addUser(TEST_USER,'topsecret','Poutrelle','Lapinou',ADMIN_USER,ADMIN_PASS) as User
+  const resultA = await addUser(TEST_USER,TEST_PASS,'Poutrelle','Lapinou',ADMIN_USER,ADMIN_PASS) as User
   expect(resultA.username).toEqual(TEST_USER)
-  await sleep(500)
   const resultB = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   expect(resultB.username).toEqual(TEST_USER)
   const resultC = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User

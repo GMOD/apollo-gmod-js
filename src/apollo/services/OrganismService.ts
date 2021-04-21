@@ -109,12 +109,13 @@ export const deleteOrganism = async (organismIdentifier: string,username:string,
     return error.message ? error.message : error
   }
 }
-export const deleteOrganismFeatures = async (organismIdentifier: string,username:string,sequences?:Array<string>|undefined): Promise<number | string> => {
+export const deleteOrganismFeatures = async (organismIdentifier: string,username:string,password:string,sequences?:Array<string>|undefined): Promise<number | string> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganismFeatures`,{
       organism: organismIdentifier,
       username,
+      password,
     })
     const { data } = await response
     return data

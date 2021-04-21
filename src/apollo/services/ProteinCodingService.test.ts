@@ -237,7 +237,7 @@ afterAll(async () => {
   let organism = await getOrganism(authCommand) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,TEST_USER)
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS)
     organism = await deleteOrganism(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS) as Organism
   }
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User

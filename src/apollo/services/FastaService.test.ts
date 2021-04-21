@@ -17,11 +17,12 @@ import {writeFile} from './IOService'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
 const TEST_USER = 'test@test.com'
+const TEST_PASS = 'asf'
 const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
-const authCommand = <JSON><unknown>{username:TEST_USER,password:'asf',organism:TEST_ORGANISM}
+const authCommand = <JSON><unknown>{username:TEST_USER,password:TEST_PASS,organism:TEST_ORGANISM}
 
 /*
 * From FastaHandlerServiceIntegrationSpec
@@ -80,7 +81,6 @@ test('write a fasta of a simple gene model', async () => {
       }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
-  console.log('return object',returnObject)
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
 
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
@@ -176,7 +176,7 @@ beforeAll(async () => {
   // 0. if user does not exist
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
+    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
     sleep(1000)
     user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
@@ -200,7 +200,7 @@ afterAll(async () => {
   let organism = await getOrganism(authCommand) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,TEST_USER)
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS)
     organism = await deleteOrganism(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS) as Organism
   }
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User

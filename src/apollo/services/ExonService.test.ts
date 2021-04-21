@@ -99,12 +99,15 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
     'features': [{'uniquename': transcriptUniqueName},{'uniquename': exonDeleteUniqueName}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteExonCommand, 'deleteExon')
+  console.log('delete exon response',deleteFeatureResponse)
 
 
   // 5. get features on sequence (should be none)
   const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
+  console.log('exon response',JSON.stringify(annotationsFoundResponse2))
   const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
   expect(genomeAnnotationFound2.features[0].children?.length).toEqual(2)
+  // validate 1 exons and 1 CDS and mins
   expect(genomeAnnotationFound2.features[0].location?.fmin).toEqual(19636)
   expect(genomeAnnotationFound2.features[0].location?.fmax).toEqual(20199)
 
@@ -119,7 +122,7 @@ beforeAll(async () => {
   // 0. if user does not exist
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
+    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
     sleep(1000)
     user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
@@ -145,7 +148,7 @@ afterAll(async () => {
   let organism = await getOrganism(authCommand) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,TEST_USER)
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS)
     organism = await deleteOrganism(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS) as Organism
   }
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
