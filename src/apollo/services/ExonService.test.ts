@@ -80,13 +80,13 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   expect(addedFeature1.location?.fmin).toEqual(19636)
   expect(addedFeature1.location?.fmax).toEqual(31167)
   expect(addedFeature1.children?.length).toEqual(3)
-  expect(addedFeature1.uniqueName).toBeDefined()
+  expect(addedFeature1.uniquename).toBeDefined()
 
   const rightExon = addedFeature1.children.filter( c => {
     return c.location?.fmin === 30857 && c.type?.name === 'exon'
   })[0]
-  const exonDeleteUniqueName = rightExon.uniqueName
-  const transcriptUniqueName = addedFeature1.uniqueName
+  const exonDeleteUniqueName = rightExon.uniquename
+  const transcriptUniqueName = addedFeature1.uniquename
 
 
   // 4. delete feature

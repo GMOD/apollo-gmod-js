@@ -3,18 +3,17 @@
  */
 import axios from 'axios'
 
+const API_URL = 'http://localhost:8080/apollo/WebServices'
+
 beforeAll(async () =>{
-  const response = await axios.get('http://localhost:8080/api')
+  const response = await axios.get(API_URL)
   const { data } = response
   expect(data).toBeDefined()
 },30000)
 
 test('web services available', async () => {
   jest.setTimeout(5000)
-  const response = await axios.get('http://localhost:8080/api')
+  const response = await axios.get(API_URL)
   const { data } = response
-  expect(data).toContain('/swagger/apollo-3.0.0.yml')
-  // const paths = Object.keys(data.paths)
-  // expect(paths.length).toBeGreaterThan(10)
-  // expect(paths).toContain('/organism/deleteOrganism')
+  expect(data).toContain('api.description')
 },20000)

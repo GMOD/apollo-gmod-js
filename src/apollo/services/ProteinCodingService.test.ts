@@ -99,8 +99,8 @@ test('Add Transcript with UTR', async () => {
   expect(addedFeature1.location?.fmin).toEqual(1216824)
   expect(addedFeature1.location?.fmax).toEqual(1235616)
   expect(addedFeature1.children?.length).toEqual(6)
-  expect(addedFeature1.uniqueName).toBeDefined()
-  const uniqueNameToDelete = addedFeature1.uniqueName
+  expect(addedFeature1.uniquename).toBeDefined()
+  const uniqueNameToDelete = addedFeature1.uniquename
 
 
   // 4. delete feature
@@ -174,7 +174,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(returnFeature.children.length).toEqual(4)
   // expect(returnFeature.parents.length).toEqual(1)
 
-  const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
+  const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniquename as string,'cds') as any
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObjectInitial).toBeDefined()
@@ -189,15 +189,15 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     organism: TEST_ORGANISM,
     features: [{
       'readthrough_stop_codon': true,
-      'uniqueName': returnFeature.uniqueName
+      'uniqueName': returnFeature.uniquename
     }]
 
   }
-  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniqueName\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
+  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand, 'setReadthroughStopCodon')
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
-  const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
+  const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniquename as string,'cds') as any
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObject).toBeDefined()
