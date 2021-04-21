@@ -12,13 +12,16 @@ import {User} from '../domain/User'
 import {Role} from '../domain/Role'
 import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
-import {annotationEditorCommand} from "./ApolloAPIService";
+import {annotationEditorCommand} from './ApolloAPIService'
+import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
 
 const TEST_USER = 'test@test.com'
+const TEST_PASS = 'secret'
 const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
+const authCommand = <JSON><unknown>{username:ADMIN_USER,password:ADMIN_PASS,organism:TEST_ORGANISM}
 
 /**
  * From ExonServiceIntegrationSpec
@@ -29,7 +32,7 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   // 1. get features on sequence (should be none)
   const getFeaturesCommand = <JSON><unknown>{
     'username': TEST_USER,
-    'password': 'secret',
+    'password': TEST_PASS,
     'organism': TEST_ORGANISM,
     'sequence': TEST_SEQUENCE
   }
@@ -41,7 +44,7 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   // 2. add transcript
   const addTranscriptCommand = <JSON><unknown>{
     'username': TEST_USER,
-    'password': 'secret',
+    'password': TEST_PASS,
     'organism': TEST_ORGANISM,
     'sequence': TEST_SEQUENCE,
     'features': [{
@@ -78,21 +81,21 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   expect(addedFeature1.location?.fmin).toEqual(19636)
   expect(addedFeature1.location?.fmax).toEqual(31167)
   expect(addedFeature1.children?.length).toEqual(3)
-  expect(addedFeature1.uniqueName).toBeDefined()
+  expect(addedFeature1.uniquename).toBeDefined()
 
   const rightExon = addedFeature1.children.filter( c => {
     return c.location?.fmin === 30857 && c.type?.name === 'exon'
   })[0]
-  const exonDeleteUniqueName = rightExon.uniqueName
-  const transcriptUniqueName = addedFeature1.uniqueName
+  const exonDeleteUniqueName = rightExon.uniquename
+  const transcriptUniqueName = addedFeature1.uniquename
 
 
   // 4. delete feature
   const deleteExonCommand = <JSON><unknown>{
     'username': TEST_USER,
-    'password': 'secret',
+    'password': TEST_PASS,
     'organism': TEST_ORGANISM,
-    'features': [{'uniqueName': transcriptUniqueName},{'uniqueName': exonDeleteUniqueName}]
+    'features': [{'uniquename': transcriptUniqueName},{'uniquename': exonDeleteUniqueName}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteExonCommand, 'deleteExon')
 
@@ -101,6 +104,7 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
   const annotationsFoundResponse2 = await annotationEditorCommand(getFeaturesCommand, 'getFeatures')
   const genomeAnnotationFound2 = new GenomeAnnotationGroup(annotationsFoundResponse2)
   expect(genomeAnnotationFound2.features[0].children?.length).toEqual(2)
+  // validate 1 exons and 1 CDS and mins
   expect(genomeAnnotationFound2.features[0].location?.fmin).toEqual(19636)
   expect(genomeAnnotationFound2.features[0].location?.fmax).toEqual(20199)
 
@@ -113,43 +117,45 @@ beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
 
   // 0. if user does not exist
-  let user = await getUser(TEST_USER) as User
+  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,) as User
+    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
     sleep(1000)
-    user = await getUser(TEST_USER) as User
+    user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
 
   // 3. if organism with directory exists
-  let organism: Organism = await getOrganism(TEST_ORGANISM) as Organism
+  let organism: Organism = await getOrganism(authCommand) as Organism
 
   // 4. add organism directory
   if (!organism || organism.commonName !== TEST_ORGANISM) {
     await addOrganismWithDirectory(
       `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
-      TEST_ORGANISM
+      TEST_ORGANISM,
+      ADMIN_USER,
+      ADMIN_PASS,
     )
-    organism = await getOrganism(TEST_ORGANISM) as Organism
+    organism = await getOrganism(authCommand) as Organism
   }
 })
 
 afterAll(async () => {
 
   // TODO:
-  let organism = await getOrganism(TEST_ORGANISM) as Organism
+  let organism = await getOrganism(authCommand) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM)
-    organism = await deleteOrganism(TEST_ORGANISM) as Organism
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS)
+    organism = await deleteOrganism(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS) as Organism
   }
-  let user = await getUser(TEST_USER) as User
+  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (user && user.username === TEST_USER) {
-    user = await deleteUser(TEST_USER) as User
+    user = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
 
   // sleep(3000)
 
-  user = await getUser(TEST_USER) as User
-  organism = await getOrganism(TEST_ORGANISM) as Organism
+  user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
+  organism = await getOrganism(authCommand) as Organism
 })
 

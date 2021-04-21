@@ -9,7 +9,7 @@ export class Feature {
   symbol: string | undefined
   description: string | undefined
   name: string | undefined
-  uniqueName: string | undefined
+  uniquename: string | undefined
   children: Array<Feature> = new Array<Feature>()
   parents: Array<Feature>  = new Array<Feature>()
   type: FeatureType | undefined
@@ -33,7 +33,7 @@ export class Feature {
     this.symbol = inputJson.symbol
     this.description = inputJson.description
     this.name = inputJson.name
-    this.uniqueName = inputJson.uniqueName
+    this.uniquename = inputJson.uniquename
     this.location = new FeatureLocation(inputJson.location,organism,sequence)
     this.type =  new FeatureType(inputJson.type.name)
     this.dateLastUpdated = new Date(inputJson.date_last_modified)
