@@ -24,9 +24,10 @@ const LOCAL_SEQ_DIRECTORY= `${LOCAL_INPUT_DIRECTORY}/seq/genome.fasta`
 
 
 const TEST_USER = 'admin@local.host'
+const TEST_PASS = 'password'
 const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'Group1.10' 
-const authCommand = <JSON><unknown>{username:TEST_USER,password:'asf'}
+const authCommand = <JSON><unknown>{username:TEST_USER,password:TEST_PASS}
 
 beforeAll( async () => {
   await removeEmptyCommonDirectory()
@@ -40,21 +41,18 @@ afterAll( async () => {
 beforeEach( async () => {
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   for( const org of allOrganisms){
-    await deleteOrganism(org.commonName)
+    await deleteOrganism(org.commonName,TEST_USER,TEST_PASS)
   }
-  await sleep(2000)
   const finalOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
 
 afterEach( async () => {
   // jest.setTimeout(10000)
-  // await sleep(1000)
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   for( const org of allOrganisms){
-    await deleteOrganism(org.commonName)
+    await deleteOrganism(org.commonName,TEST_USER,TEST_PASS)
   }
-  await sleep(1000)
   const finalOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
@@ -82,9 +80,8 @@ test('Find All Organisms', async () => {
   expect(inputFiles).toContain('trackList.json')
   expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
   const result = await addOrganismWithDirectory(
-    APOLLO_INPUT_DIRECTORY,'myorg'
+    APOLLO_INPUT_DIRECTORY,'myorg',TEST_USER,TEST_PASS
   )
-  await sleep(1000)
   const addedOrganismResult = await getAllOrganisms(authCommand) as Array<Organism>
   expect(typeof addedOrganismResult).not.toEqual('string')
   expect(addedOrganismResult.length).toEqual(1)
@@ -95,7 +92,7 @@ test('Find All Organisms', async () => {
   expect(addedOrganism.commonName).toEqual('myorg')
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   for( const org of allOrganisms){
-    await deleteOrganism(org.commonName)
+    await deleteOrganism(org.commonName,TEST_USER,TEST_PASS)
   }
 },20000)
 
@@ -110,9 +107,8 @@ test('Get One Organisms', async () => {
   expect(inputFiles).toContain('trackList.json')
   expect(fse.pathExistsSync(LOCAL_INPUT_DIRECTORY)).toBeTruthy()
   const result = await addOrganismWithDirectory(
-    APOLLO_INPUT_DIRECTORY,'myorg'
+    APOLLO_INPUT_DIRECTORY,'myorg',TEST_USER,TEST_PASS,
   )
-  await sleep(1000)
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
@@ -122,7 +118,7 @@ test('Get One Organisms', async () => {
   expect(addedOrganism.commonName).toEqual('myorg')
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   for( const org of allOrganisms){
-    await deleteOrganism(org.commonName)
+    await deleteOrganism(org.commonName,TEST_USER,TEST_PASS)
   }
 })
 
@@ -132,10 +128,9 @@ test('Add Organism With Sequence', async () => {
   expect(typeof initOrganisms).not.toEqual('string')
   expect(initOrganisms.length).toEqual(0)
 
-  const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg')
+  const result = await addOrganismWithSequence(LOCAL_SEQ_DIRECTORY,'myseqorg',TEST_USER,TEST_PASS)
   expect(typeof result).not.toEqual('string')
   expect(JSON.stringify(result)).not.toContain('error')
-  await sleep(1000)
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myseqorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
@@ -144,14 +139,11 @@ test('Add Organism With Sequence', async () => {
   expect(addedOrganism.genomeFasta).toEqual('seq/myseqorg.fa')
   expect(addedOrganism.genomeFastaIndex).toEqual('seq/myseqorg.fa.fai')
 
-  await sleep(1000)
-
   const allOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   expect(typeof allOrganisms).not.toEqual('string')
   expect(allOrganisms.length).toEqual(1)
 
-  await sleep(1000)
-  await deleteOrganism(addedOrganism.commonName)
+  await deleteOrganism(addedOrganism.commonName,TEST_USER,TEST_PASS)
 
 })
 

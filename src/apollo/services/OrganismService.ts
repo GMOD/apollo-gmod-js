@@ -53,15 +53,14 @@ export const getOrganism = async (inputData:JSON): Promise<Organism | string> =>
   }
 }
 
-export const addOrganismWithDirectory = async (directory:string,commonName:string): Promise<Organism | string> => {
+export const addOrganismWithDirectory = async (directory:string,commonName:string,username:string,password:string): Promise<Organism | string> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/organism/addOrganism`,{
-      email:'madeup',
-      password:'password',
+      username,
+      password,
       directory,
       commonName,
-      uniqueName:'ABC123'
     })
     const { data } = await response
     return data
@@ -71,10 +70,10 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
 }
 
 
-export const addOrganismWithSequence = async (directory:string,commonName:string): Promise<Organism | string> => {
+export const addOrganismWithSequence = async (directory:string,commonName:string,username:string,password:string): Promise<Organism | string> => {
   const formData = new FormData()
-  formData.append('email','madeup')
-  formData.append('password','password')
+  formData.append('username',username)
+  formData.append('password',password)
   formData.append('directory',directory)
   formData.append('sequenceData',fse.createReadStream(directory))
   formData.append('commonName',commonName)
@@ -95,10 +94,15 @@ export const addOrganismWithSequence = async (directory:string,commonName:string
   }
 }
 
-export const deleteOrganism = async (organismIdentifier: string): Promise<Organism | string> => {
+export const deleteOrganism = async (organismIdentifier: string,username:string,password:string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganism`,{organism: organismIdentifier})
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganism`,
+      {
+        organism: organismIdentifier,
+        username,
+        password,
+      })
     const { data } = await response
     return data
   } catch (error) {
