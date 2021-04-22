@@ -81,7 +81,6 @@ test('write a fasta of a simple gene model', async () => {
       }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
-  console.log('fasta return object ',JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
 
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)

@@ -15,7 +15,6 @@ import {
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
-import {sleep} from "../functions/Timing";
 
 const TEST_DATA = `${__dirname}/../../../test-data`
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
@@ -106,7 +105,6 @@ test('Get One Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg',ADMIN_USER,ADMIN_PASS,
   )
-  sleep(5000)
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
@@ -131,9 +129,7 @@ test('Add Organism With Sequence', async () => {
   expect(JSON.stringify(result)).not.toContain('error')
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myseqorg'
-  sleep(5000)
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
-  console.log('adding organism with sequence',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
 
   expect(addedOrganism.genomeFasta).toEqual('seq/myseqorg.fa')

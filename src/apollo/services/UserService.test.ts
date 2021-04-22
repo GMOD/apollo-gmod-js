@@ -6,7 +6,6 @@
 import {addUser, deleteUser, getUser, loadUsers} from './UserService'
 import {User} from '../domain/User'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
-import {sleep} from '../functions/Timing'
 
 
 const TEST_USER = 'trash2@bx.psu.ed'
@@ -44,9 +43,7 @@ test('Delete User', async () => {
   expect(resultB.username).toEqual(TEST_USER)
   const resultC = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   expect(resultC.username).toEqual(TEST_USER)
-  sleep(2000)
   const resultD = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS)
-  console.log('result D',resultD)
   expect(resultD).toBeUndefined()
 
 })
