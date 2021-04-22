@@ -15,6 +15,7 @@ import {
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
+import {sleep} from "../functions/Timing";
 
 const TEST_DATA = `${__dirname}/../../../test-data`
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
@@ -129,6 +130,7 @@ test('Add Organism With Sequence', async () => {
   expect(JSON.stringify(result)).not.toContain('error')
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myseqorg'
+  sleep(2000)
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
   console.log('adding organism with sequence',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
