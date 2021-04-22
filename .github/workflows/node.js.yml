@@ -30,10 +30,12 @@ jobs:
       run: docker run -d -p 8080:8080 -v `pwd`/temp-apollo-test-data/:/data/ -e "WEBAPOLLO_DEBUG=true" gmod/apollo:latest
     - name: Test Server up
       run: |
-        curl http://localhost:8080/apollo/user/loadUsers || true
+        curl http://localhost:8080/annotator/system || true
         sleep 60
-        curl http://localhost:8080/apollo/user/loadUsers
-        curl -s 'http://localhost:8080/apollo/WebServices' > /dev/null
+        curl http://localhost:8080/annotator/system
+        curl -s 'http://localhost:8080/WebServices' > /dev/null
     - name: Test
-      run: yarn test:nowatch:docker
+      run: |
+        export APOLLO_URL="http://localhost:8080/"
+        yarn test:nowatch:docker
 
