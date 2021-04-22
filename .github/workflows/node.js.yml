@@ -39,6 +39,6 @@ jobs:
         curl -s 'http://localhost:8080/WebServices' > /dev/null
     - name: Test
       run: |
-        export APOLLO_URL="http://localhost:8080/"
+        export APOLLO_URL="http://localhost:8080"
         yarn test:nowatch:docker
 
