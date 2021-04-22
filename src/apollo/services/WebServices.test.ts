@@ -2,8 +2,9 @@
  *  @jest-environment node
  */
 import axios from 'axios'
+import {ApolloServer} from '../ApolloServer'
 
-const API_URL = 'http://localhost:8080/apollo/WebServices'
+const API_URL = ApolloServer.getHost()+'/WebServices'
 
 beforeAll(async () =>{
   const response = await axios.get(API_URL)
