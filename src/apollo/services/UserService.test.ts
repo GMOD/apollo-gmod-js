@@ -44,6 +44,7 @@ test('Delete User', async () => {
   const resultC = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   expect(resultC.username).toEqual(TEST_USER)
   const resultD = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS)
+  console.log('result D',resultD)
   expect(resultD).toBeUndefined()
 
 })

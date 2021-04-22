@@ -17,7 +17,7 @@ test('Validate the default common path', async () => {
   expect(commonPath.writable).toEqual(true)
   const root = commonPath.root
 
-  expect(commonPath.absolutePath).toEqual(root+'/'+commonPath.relativePath)
+  expect(commonPath.absolutePath).toEqual(root+(root.endsWith('/') ? '':'/') +commonPath.relativePath)
 
 })
 

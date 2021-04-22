@@ -130,6 +130,7 @@ test('Add Organism With Sequence', async () => {
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myseqorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
+  console.log('adding organism with sequence',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
 
   expect(addedOrganism.genomeFasta).toEqual('seq/myseqorg.fa')

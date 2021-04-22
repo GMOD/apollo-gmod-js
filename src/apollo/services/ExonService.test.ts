@@ -65,6 +65,7 @@ test('Create 2 exons on a transcript and delete one, confirm boundaries mapped',
     }]
   }
   const returnObject = await addTranscript(addTranscriptCommand)
+  console.log('exon return object ',JSON.stringify(returnObject))
   const returnGenomeAnnotationGroup = new GenomeAnnotationGroup(returnObject)
   expect(returnGenomeAnnotationGroup.features.length).toEqual(1)
   const returnFeature = returnGenomeAnnotationGroup.features[0]
