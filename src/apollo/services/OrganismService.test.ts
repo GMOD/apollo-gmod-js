@@ -106,6 +106,7 @@ test('Get One Organisms', async () => {
   const result = await addOrganismWithDirectory(
     APOLLO_INPUT_DIRECTORY,'myorg',ADMIN_USER,ADMIN_PASS,
   )
+  sleep(5000)
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
@@ -130,7 +131,7 @@ test('Add Organism With Sequence', async () => {
   expect(JSON.stringify(result)).not.toContain('error')
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myseqorg'
-  sleep(2000)
+  sleep(5000)
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
   console.log('adding organism with sequence',addedOrganism)
   expect(addedOrganism.commonName).toEqual('myseqorg')
