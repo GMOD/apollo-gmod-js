@@ -176,7 +176,7 @@ beforeAll(async () => {
   // 0. if user does not exist
   let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User', Role.ADMIN,ADMIN_USER,ADMIN_PASS) as User
+    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User', ADMIN_USER,ADMIN_PASS,Role.ADMIN) as User
     sleep(1000)
     user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   }
