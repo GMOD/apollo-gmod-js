@@ -36,7 +36,7 @@ test('Get User', async () => {
 
 })
 
-test('Delete User', async () => {
+test.skip('Delete User', async () => {
   const hasUser = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
   const resultA = await addUser(TEST_USER,TEST_PASS,'Poutrelle','Lapinou',ADMIN_USER,ADMIN_PASS) as User
   expect(resultA.username).toEqual(TEST_USER)
