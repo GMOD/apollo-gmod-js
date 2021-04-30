@@ -15,6 +15,7 @@ import {
 import {Organism} from '../domain/Organism'
 import fse from 'fs-extra'
 import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
+import {sleep} from "../functions/Timing";
 
 const TEST_DATA = `${__dirname}/../../../test-data`
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
@@ -49,6 +50,7 @@ afterEach( async () => {
   for( const org of allOrganisms){
     await deleteOrganism(org.commonName,ADMIN_USER,ADMIN_PASS)
   }
+  sleep(5000)
   const finalOrganisms = await getAllOrganisms(authCommand) as Array<Organism>
   expect(finalOrganisms.length).toEqual(0)
 })
@@ -108,6 +110,7 @@ test('Get One Organisms', async () => {
   const getOneOrganism = JSON.parse(JSON.stringify(authCommand))
   getOneOrganism.organism = 'myorg'
   const addedOrganism = await getOrganism(getOneOrganism) as Organism
+  sleep(5000)
   expect(addedOrganism.commonName).toEqual('myorg')
   expect(addedOrganism.sequences).toEqual(1)
   expect(addedOrganism.directory).toEqual(APOLLO_INPUT_DIRECTORY)
