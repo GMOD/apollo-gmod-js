@@ -27,18 +27,13 @@ jobs:
         rm -rf `pwd`/temp-apollo-test-data
         cp -r `pwd`/test-data `pwd`/temp-apollo-test-data
     - name: Run Apollo
-      run: docker run -d -p 8080:8080 -v `pwd`/temp-apollo-test-data/:/data/ -e "WEBAPOLLO_DEBUG=true" gmod/apollo:latest
+      run: docker run -d -p 8080:8080 -v `pwd`/temp-apollo-test-data/:/data/ -e "WEBAPOLLO_DEBUG=true" gmod/apollo3server:latest
     - name: Test Server up
       run: |
+        curl http://localhost:8080/user/loadUsers || true
         sleep 60
-        ps -ef | grep docker
-        netstat -tan | grep LISTEN
-        curl http://localhost:8080/annotator/system || true
-        sleep 60
-        curl http://localhost:8080/annotator/system
-        curl -s 'http://localhost:8080/WebServices' > /dev/null
+        curl http://localhost:8080/user/loadUsers
+        curl -s 'http://localhost:8080/swagger/api' > /dev/null
     - name: Test
-      run: |
-        export APOLLO_URL="http://localhost:8080"
-        yarn test:nowatch:docker
+      run: yarn test:nowatch:docker
 

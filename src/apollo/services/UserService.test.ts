@@ -5,55 +5,51 @@
 
 import {addUser, deleteUser, getUser, loadUsers} from './UserService'
 import {User} from '../domain/User'
-import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
-import {sleep} from "../functions/Timing";
-
-
-const TEST_USER = 'trash2@bx.psu.ed'
-const TEST_PASS = 'topsecret'
-
+import {sleep} from '../functions/Timing'
 
 test('Load Users', async () => {
-  const users = await loadUsers(ADMIN_USER,ADMIN_PASS) as Array<User>
+  const users = await loadUsers() as Array<User>
   expect(typeof users).not.toEqual('string')
   expect(users.length).toBeGreaterThan(0)
   // TODO: add a filter for 'admin@local.host
-  const user:User =  users.filter( s => s.username == ADMIN_USER)[0]
-  expect(user.firstName).toEqual('Ad')
-  expect(user.lastName).toEqual('min')
+  const user:User =  users.filter( s => s.username == 'admin@local.host')[0]
+  expect(user.firstName).toEqual('Admin')
+  expect(user.lastName).toEqual('User')
   expect(user.inactive).toEqual(false)
   expect(user.role).toEqual('ADMIN')
-  expect(user.username).toEqual(ADMIN_USER)
+  expect(user.username).toEqual('admin@local.host')
 
 })
 
 test('Get User', async () => {
-  const user = await getUser(ADMIN_USER,ADMIN_USER,ADMIN_PASS) as User
+  const user = await getUser('admin@local.host') as User
   expect(typeof user).not.toEqual('string')
-  expect(user.firstName).toEqual('Ad')
-  expect(user.lastName).toEqual('min')
-  expect(user.username).toEqual(ADMIN_USER)
+  expect(user.firstName).toEqual('Admin')
+  expect(user.lastName).toEqual('User')
+  expect(user.username).toEqual('admin@local.host')
 
 })
 
-test.skip('Delete User', async () => {
-  const hasUser = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
-  const resultA = await addUser(TEST_USER,TEST_PASS,'Poutrelle','Lapinou',ADMIN_USER,ADMIN_PASS) as User
-  expect(resultA.username).toEqual(TEST_USER)
-  const resultB = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
-  expect(resultB.username).toEqual(TEST_USER)
-  const resultC = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
-  expect(resultC.username).toEqual(TEST_USER)
-  sleep(5000)
-  const resultD = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS)
+test('Delete User', async () => {
+  const resultA = await addUser('trash2@bx.psu.edu','Poutrelle','Lapinou') as User
+  expect(resultA.username).toEqual('trash2@bx.psu.edu')
+  let users = await loadUsers() as Array<User>
+  await sleep(500)
+  const resultB = await getUser('trash2@bx.psu.edu') as User
+  expect(resultB.username).toEqual('trash2@bx.psu.edu')
+  const resultC = await deleteUser('trash2@bx.psu.edu') as User
+  expect(resultC.username).toEqual('trash2@bx.psu.edu')
+  users = await loadUsers() as Array<User>
+  let resultD = await getUser('trash2@bx.psu.edu')
+  resultD = await getUser('trash2@bx.psu.edu')
   expect(resultD).toBeUndefined()
 
 })
 
 beforeEach( async () => {
-  await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS)
+  await deleteUser('trash2@bx.psu.edu')
 })
 
 afterEach( async () => {
-  await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS)
+  await deleteUser('trash2@bx.psu.edu')
 })

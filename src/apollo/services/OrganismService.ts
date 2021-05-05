@@ -25,10 +25,10 @@ export const getCommonDirectory = async  (): Promise<string> => {
   }
 }
 
-export const getAllOrganisms = async (inputData:JSON): Promise<Array<Organism> | string> => {
+export const getAllOrganisms = async (): Promise<Array<Organism> | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/organism/findAllOrganisms`,inputData)
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms`)
     const { data } = await response
     return data
   } catch (error) {
@@ -36,16 +36,16 @@ export const getAllOrganisms = async (inputData:JSON): Promise<Array<Organism> |
   }
 }
 
-export const getOrganism = async (inputData:JSON): Promise<Organism | string> => {
+export const getOrganism = async (lookup:string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/organism/findAllOrganisms`,inputData)
+    const response = await axios.get( `${ApolloServer.getHost()}/organism/findAllOrganisms?organism=${lookup}`)
     const { data } = await response
     if(data.length>1){
-      return `Error: duplicate organisms return for ${inputData} organism ${data}`
+      return `Error: duplicate organisms return for '${lookup}' organism ${data}`
     }
     if(data.length==0){
-      return `Error: No organisms returned for '${inputData}'`
+      return `Error: No organisms returned for '${lookup}'`
     }
     return data[0]
   } catch (error) {
@@ -53,14 +53,15 @@ export const getOrganism = async (inputData:JSON): Promise<Organism | string> =>
   }
 }
 
-export const addOrganismWithDirectory = async (directory:string,commonName:string,username:string,password:string): Promise<Organism | string> => {
+export const addOrganismWithDirectory = async (directory:string,commonName:string): Promise<Organism | string> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/organism/addOrganism`,{
-      username,
-      password,
+      email:'madeup',
+      password:'password',
       directory,
       commonName,
+      uniqueName:'ABC123'
     })
     const { data } = await response
     return data
@@ -70,10 +71,10 @@ export const addOrganismWithDirectory = async (directory:string,commonName:strin
 }
 
 
-export const addOrganismWithSequence = async (directory:string,commonName:string,username:string,password:string): Promise<Organism | string> => {
+export const addOrganismWithSequence = async (directory:string,commonName:string): Promise<Organism | string> => {
   const formData = new FormData()
-  formData.append('username',username)
-  formData.append('password',password)
+  formData.append('email','madeup')
+  formData.append('password','password')
   formData.append('directory',directory)
   formData.append('sequenceData',fse.createReadStream(directory))
   formData.append('commonName',commonName)
@@ -94,29 +95,20 @@ export const addOrganismWithSequence = async (directory:string,commonName:string
   }
 }
 
-export const deleteOrganism = async (organismIdentifier: string,username:string,password:string): Promise<Organism | string> => {
+export const deleteOrganism = async (organismIdentifier: string): Promise<Organism | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganism`,
-      {
-        organism: organismIdentifier,
-        username,
-        password,
-      })
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganism`,{organism: organismIdentifier})
     const { data } = await response
     return data
   } catch (error) {
     return error.message ? error.message : error
   }
 }
-export const deleteOrganismFeatures = async (organismIdentifier: string,username:string,password:string,sequences?:Array<string>|undefined): Promise<number | string> => {
+export const deleteOrganismFeatures = async (organismIdentifier: string,sequences?:Array<string>|undefined): Promise<number | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganismFeatures`,{
-      organism: organismIdentifier,
-      username,
-      password,
-    })
+    const response = await axios.post( `${ApolloServer.getHost()}/organism/deleteOrganismFeatures`,{organism: organismIdentifier})
     const { data } = await response
     return data
   } catch (error) {

@@ -3,10 +3,10 @@ import axios from 'axios'
 import {ApolloServer} from '../ApolloServer'
 
 
-export const loadUsers = async (username:string,password:string): Promise<Array<User> | string> => {
+export const loadUsers = async (): Promise<Array<User> | string> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/user/loadUsers`,{username,password})
+    const response = await axios.get( `${ApolloServer.getHost()}/user/loadUsers`)
     const { data } = await response
     return data
   } catch (error) {
@@ -14,17 +14,14 @@ export const loadUsers = async (username:string,password:string): Promise<Array<
   }
 }
 
-export const addUser = async (email:string,newPassword:string,firstName:string,lastName:string,username:string,password:string,
-  role = 'user'): Promise<User | string> => {
+export const addUser = async (username:string,firstName:string,lastName:string,role = 'user'): Promise<User | string> => {
 
   try {
     const response = await axios.post( `${ApolloServer.getHost()}/user/createUser`,{
-      email,
-      newPassword,
+      email:username,
       firstName:firstName,
       lastName:lastName,
-      username,
-      password,
+      password:'password',
       role:role.toUpperCase(),
     })
     const { data } = await response
@@ -34,27 +31,26 @@ export const addUser = async (email:string,newPassword:string,firstName:string,l
   }
 }
 
-export const getUser = async (userId:string,username:string,password:string): Promise<User | string | undefined> => {
+export const getUser = async (username:string): Promise<User | string | undefined> => {
 
   try
   {
-    const response = await axios.post( `${ApolloServer.getHost()}/user/loadUsers`,{userId,username,password})
+    const response = await axios.post( `${ApolloServer.getHost()}/user/getUser`,{username:username})
     const { data } = await response
-    return data && data.length>0 ? data[0] : undefined
+    return data
   } catch (error) {
-    console.error(error)
+    // console.error(error)
     return undefined
     // return error.message ? error.message : error
   }
 }
-export const deleteUser = async (userId: string,username:string,password:string): Promise<User | string | null> => {
+export const deleteUser = async (username: string): Promise<User | string | null> => {
 
   try {
-    const response = await axios.post( `${ApolloServer.getHost()}/user/deleteUser`,{userToDelete: userId,username,password})
+    const response = await axios.post( `${ApolloServer.getHost()}/user/deleteUser`,{userToDelete: username})
     const { data } = await response
     return data
   } catch (error) {
-    console.error(error)
     return null
     // return error.message ? error.message : error
   }

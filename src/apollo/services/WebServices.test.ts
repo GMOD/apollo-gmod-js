@@ -2,19 +2,19 @@
  *  @jest-environment node
  */
 import axios from 'axios'
-import {ApolloServer} from '../ApolloServer'
-
-const API_URL = ApolloServer.getHost()+'/WebServices'
 
 beforeAll(async () =>{
-  const response = await axios.get(API_URL)
+  const response = await axios.get('http://localhost:8080/swagger/api')
   const { data } = response
   expect(data).toBeDefined()
 },30000)
 
 test('web services available', async () => {
   jest.setTimeout(5000)
-  const response = await axios.get(API_URL)
+  const response = await axios.get('http://localhost:8080/swagger/api')
   const { data } = response
-  expect(data).toContain('api.description')
+  expect(data.swagger).toEqual('2.0')
+  const paths = Object.keys(data.paths)
+  expect(paths.length).toBeGreaterThan(10)
+  expect(paths).toContain('/annotationEditor/getAttributes')
 },20000)

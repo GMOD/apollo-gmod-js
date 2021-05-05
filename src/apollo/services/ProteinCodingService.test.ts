@@ -10,18 +10,16 @@ import {Organism} from '../domain/Organism'
 import {addUser, deleteUser, getUser} from './UserService'
 import {User} from '../domain/User'
 import {Role} from '../domain/Role'
+import {sleep} from '../functions/Timing'
 import {GenomeAnnotationGroup} from '../domain/GenomeAnnotationGroup'
 import {getSequenceForFeatures} from './SequenceService'
-import {annotationEditorCommand} from './ApolloAPIService'
-import {ADMIN_PASS, ADMIN_USER} from './TestCredentials'
+import {annotationEditorCommand} from "./ApolloAPIService";
 
 const TEST_USER = 'test@test.com'
-const TEST_PASS = 'secret'
 const TEST_ORGANISM = 'testAnimal'
 const TEST_SEQUENCE = 'honeybee-Group1.10'
 const LOCAL_APOLLO_DATA = `${__dirname}/../../../temp-apollo-test-data`
 const APOLLO_DATA = process.env.DOCKER_CI ? '/data' : LOCAL_APOLLO_DATA
-const authCommand = <JSON><unknown>{username:TEST_USER,password:'asf',organism:TEST_ORGANISM}
 
 /**
  * From RequestHandlingServiceIntegrationSpec 'add transcript with UTR'
@@ -32,7 +30,7 @@ test('Add Transcript with UTR', async () => {
   // 1. get features on sequence (should be none)
   const getFeaturesCommand = <JSON><unknown>{
     'username': TEST_USER,
-    'password': TEST_PASS,
+    'password': 'secret',
     'organism': TEST_ORGANISM,
     'sequence': 'Group1.10'
   }
@@ -97,8 +95,8 @@ test('Add Transcript with UTR', async () => {
   expect(addedFeature1.location?.fmin).toEqual(1216824)
   expect(addedFeature1.location?.fmax).toEqual(1235616)
   expect(addedFeature1.children?.length).toEqual(6)
-  expect(addedFeature1.uniquename).toBeDefined()
-  const uniqueNameToDelete = addedFeature1.uniquename
+  expect(addedFeature1.uniqueName).toBeDefined()
+  const uniqueNameToDelete = addedFeature1.uniqueName
 
 
   // 4. delete feature
@@ -106,7 +104,7 @@ test('Add Transcript with UTR', async () => {
     'username': TEST_USER,
     'password': 'secret',
     'organism': TEST_ORGANISM,
-    'features': [{'uniquename': uniqueNameToDelete}]
+    'features': [{'uniqueName': uniqueNameToDelete}]
   }
   const deleteFeatureResponse = await annotationEditorCommand(deleteFeatureCommand, 'deleteFeature')
 
@@ -172,7 +170,7 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
   expect(returnFeature.children.length).toEqual(4)
   // expect(returnFeature.parents.length).toEqual(1)
 
-  const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniquename as string,'cds',TEST_USER,TEST_PASS) as any
+  const getCDSSequenceReturnObjectInitial = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObjectInitial).toBeDefined()
@@ -187,15 +185,15 @@ test('adding a gene model, a stop codon readthrough and getting its modified seq
     organism: TEST_ORGANISM,
     features: [{
       'readthrough_stop_codon': true,
-      'uniquename': returnFeature.uniquename
+      'uniqueName': returnFeature.uniqueName
     }]
 
   }
-  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniquename\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
+  // "{ ${testCredentials} \"operation\":\"set_readthrough_stop_codon\",\"features\":[{\"readthrough_stop_codon\":true,\"uniqueName\":\"@UNIQUENAME@\"}],\"track\":\"Group1.10\",\"clientToken\":\"1231232\"}"
   const stopCodonReadthroughObject = await annotationEditorCommand(setReadThroughCommand, 'setReadthroughStopCodon')
   expect(stopCodonReadthroughObject).not.toContain('Request failed')
 
-  const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniquename as string,'cds',TEST_USER,TEST_PASS) as any
+  const getCDSSequenceReturnObject = await getSequenceForFeatures(TEST_ORGANISM,TEST_SEQUENCE,returnFeature.uniqueName as string,'cds') as any
 
   // then: "we should get the anticipated CDS sequence"
   expect(getCDSSequenceReturnObject).toBeDefined()
@@ -210,41 +208,43 @@ beforeAll(async () => {
   const result = await removeEmptyCommonDirectory()
 
   // 0. if user does not exist
-  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
+  let user = await getUser(TEST_USER) as User
   if (!user) {
-    const addedUser = await addUser(TEST_USER,TEST_PASS, 'Admin', 'User',ADMIN_USER,ADMIN_PASS, Role.ADMIN,) as User
-    user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
+    const addedUser = await addUser(TEST_USER, 'Admin', 'User', Role.ADMIN,) as User
+    sleep(1000)
+    user = await getUser(TEST_USER) as User
   }
 
   // 3. if organism with directory exists
-  let organism: Organism = await getOrganism(authCommand) as Organism
+  let organism: Organism = await getOrganism(TEST_ORGANISM) as Organism
 
   // 4. add organism directory
   if (!organism || organism.commonName !== TEST_ORGANISM) {
     await addOrganismWithDirectory(
       `${APOLLO_DATA}/sequences/honeybee-Group1.10/`,
-      TEST_ORGANISM,
-      ADMIN_USER,
-      ADMIN_PASS,
+      TEST_ORGANISM
     )
-    organism = await getOrganism(authCommand) as Organism
+    organism = await getOrganism(TEST_ORGANISM) as Organism
   }
 })
 
 afterAll(async () => {
 
   // TODO:
-  let organism = await getOrganism(authCommand) as Organism
+  let organism = await getOrganism(TEST_ORGANISM) as Organism
 
   if (organism && organism.commonName === TEST_ORGANISM) {
-    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS)
-    organism = await deleteOrganism(TEST_ORGANISM,ADMIN_USER,ADMIN_PASS) as Organism
+    const totalDeleted = await deleteOrganismFeatures(TEST_ORGANISM)
+    organism = await deleteOrganism(TEST_ORGANISM) as Organism
   }
-  let user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
+  let user = await getUser(TEST_USER) as User
   if (user && user.username === TEST_USER) {
-    user = await deleteUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
+    user = await deleteUser(TEST_USER) as User
   }
-  user = await getUser(TEST_USER,ADMIN_USER,ADMIN_PASS) as User
-  organism = await getOrganism(authCommand) as Organism
+
+  // sleep(3000)
+
+  user = await getUser(TEST_USER) as User
+  organism = await getOrganism(TEST_ORGANISM) as Organism
 })
 
